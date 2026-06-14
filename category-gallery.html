@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View bulk art stock and order custom paintings. Catalog by style category.">
+  <title>Bulk Art Collection | Samridhi Art Studio</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+
+</head>
+<body>
+
+  <!-- Top Promo Banner -->
+  <div class="top-promo-banner">
+    <i class="fa-solid fa-tags"></i> Bulk Order Special: Add any 5 or more paintings to your cart to unlock flat tiered discounts (Save up to 50%!)
+  </div>
+
+  <!-- Sticky Glassmorphic Header -->
+  <header id="app-header" class="scrolled">
+    <a href="index.html" class="logo">
+      Samridhi<span class="logo-dot"></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="shop.html" class="nav-link">Shop & Bulk</a></li>
+        <li><a href="commission.html" class="nav-link">Customized Order</a></li>
+        <li><a href="index.html#courses" class="nav-link">Courses</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="cart-icon-btn" id="cart-trigger" aria-label="Open shopping cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+      <button class="mobile-menu-btn" id="mobile-menu-trigger" aria-label="Toggle navigation menu">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Category Hero Section -->
+  <section class="category-hero">
+    <div class="breadcrumb-row">
+      <a href="index.html">Home</a>
+      <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i>
+      <a href="shop.html">Shop & Bulk</a>
+      <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i>
+      <span id="category-breadcrumb">Collection</span>
+    </div>
+    
+    <div class="category-intro">
+      <div class="category-intro-left">
+        <h1 id="category-title">Bulk Category Collection</h1>
+        <p id="category-description">Loading category details...</p>
+      </div>
+      <div class="category-intro-right">
+        <a href="shop.html" class="btn btn-secondary btn-sm">
+          <i class="fa-solid fa-arrow-left"></i> Back to Shop Gallery
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paintings Gallery / Merchandise details Section -->
+  <main class="gallery-container">
+    <div class="bulk-calculator-wrapper">
+      <div class="bulk-calc-grid">
+        
+        <!-- Left Column: Large Rounded Preview Frame -->
+        <div class="bulk-preview-column">
+          <div class="bulk-preview-frame">
+            <img id="bulk-preview-img" src="" alt="Selected Variation Preview" onerror="this.src='assets/paintings/sunset_solitude.png';">
+          </div>
+        </div>
+
+        <!-- Right Column: Premium Product Details & Controls -->
+        <div class="bulk-details-column">
+          <div class="bulk-detail-header">
+            <span class="bulk-detail-category" id="bulk-category-tag">Collection Category</span>
+            <h2 class="bulk-detail-title" id="bulk-preview-title">Painting Title</h2>
+            
+            <div class="bulk-price-status-row">
+              <div class="bulk-price-container">
+                <span class="bulk-price-value">₹200</span>
+                <span class="bulk-price-label">per piece</span>
+              </div>
+              <span class="badge-stock-status">
+                <i class="fa-solid fa-circle-check"></i> IN STOCK & READY TO SHIP
+              </span>
+            </div>
+
+            <!-- Sleek Bulk Discounts Tiers Cards -->
+            <div class="bulk-tiers-grid" style="display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap;">
+              <div class="tier-card" id="tier-card-1" style="flex: 1; min-width: 100px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; transition: all 0.3s ease;">
+                <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 600;">1–4 Items</span>
+                <strong style="font-size: 1.1rem; color: var(--text-primary); display: block; margin-top: 0.2rem;">₹200<span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">/ea</span></strong>
+              </div>
+              <div class="tier-card" id="tier-card-2" style="flex: 1; min-width: 100px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; position: relative; transition: all 0.3s ease;">
+                <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 600;">5–9 Items</span>
+                <strong style="font-size: 1.1rem; color: var(--text-primary); display: block; margin-top: 0.2rem;">₹150<span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">/ea</span></strong>
+                <span style="position: absolute; top: -8px; right: 4px; background: var(--success); color: white; font-size: 0.6rem; padding: 1px 4px; border-radius: 4px; font-weight: 700;">SAVE 25%</span>
+              </div>
+              <div class="tier-card" id="tier-card-3" style="flex: 1; min-width: 100px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; position: relative; transition: all 0.3s ease;">
+                <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 600;">10+ Items</span>
+                <strong style="font-size: 1.1rem; color: var(--text-primary); display: block; margin-top: 0.2rem;">₹100<span style="font-size: 0.8rem; font-weight: normal; color: var(--text-secondary);">/ea</span></strong>
+                <span style="position: absolute; top: -8px; right: 4px; background: var(--success); color: white; font-size: 0.6rem; padding: 1px 4px; border-radius: 4px; font-weight: 700;">SAVE 50%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bulk-detail-body">
+            <p class="bulk-detail-desc" id="bulk-preview-desc">Painting description...</p>
+            
+            <hr class="bulk-divider">
+
+            <form id="bulk-calc-input-form" onsubmit="event.preventDefault();" class="bulk-merch-form">
+              
+              <!-- Variations selector showing small square painting images acting as swatches -->
+              <div class="form-group">
+                <label class="bulk-control-label">SELECT PAINTING VARIATION</label>
+                <div class="bulk-thumbnails-picker" id="bulk-thumbnails-container">
+                  <!-- Generated Dynamically by JS -->
+                </div>
+              </div>
+
+              <!-- Quantity and Breakdowns Row -->
+              <div class="bulk-order-inputs-breakdown">
+                <div class="form-group qty-group">
+                  <label for="bulk-qty" class="bulk-control-label">ORDER QUANTITY</label>
+                  <div class="bulk-qty-selector">
+                    <button type="button" class="bulk-qty-btn" id="bulk-qty-dec"><i class="fa-solid fa-minus"></i></button>
+                    <input type="number" id="bulk-qty" value="1" min="1" required>
+                    <button type="button" class="bulk-qty-btn" id="bulk-qty-inc"><i class="fa-solid fa-plus"></i></button>
+                  </div>
+                </div>
+
+                <div class="bulk-price-breakdown">
+                  <div class="breakdown-row">
+                    <span>Price per painting</span>
+                    <strong id="calc-price-unit">₹200</strong>
+                  </div>
+                  <div class="breakdown-row savings">
+                    <span>Bulk Savings</span>
+                    <strong id="calc-savings">₹0</strong>
+                  </div>
+                  <div class="breakdown-row total">
+                    <span>Estimated Total</span>
+                    <strong id="calc-total-cost">₹0</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions Buttons -->
+              <div class="bulk-actions-wrapper" style="grid-template-columns: 1fr;">
+                <button type="button" class="btn btn-primary btn-lg" id="bulk-add-to-cart-btn" style="width: 100%;">
+                  <i class="fa-solid fa-bag-shopping"></i> Add Selected to Bag
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>Samridhi</h4>
+        <p>Modern fine art and academies dedicated to textures, palettes, and light-filled landscapes.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Art Studio</h4>
+        <ul>
+          <li><a href="shop.html">Browse Gallery</a></li>
+          <li><a href="index.html#room-preview">Virtual Wall Simulator</a></li>
+          <li><a href="index.html#about">Artist Statement</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Art Academy</h4>
+        <ul>
+          <li><a href="index.html#courses">All Courses</a></li>
+          <li><a href="index.html#about">Student Portal</a></li>
+          <li><a href="index.html#contact">Syllabus Inquiries</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Help & Info</h4>
+        <ul>
+          <li><a href="shipping-policy.html">Shipping & Delivery</a></li>
+          <li><a href="refund-policy.html">Refunds & Returns</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Samridhi Fine Art. All rights reserved.</p>
+      <p>Designed with love for creators.</p>
+    </div>
+  </footer>
+
+  <!-- Slide-out Shopping Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Bag</h3>
+      <button class="cart-close-btn" id="cart-close" aria-label="Close cart drawer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items" id="cart-items-container">
+      <!-- Generated Dynamically by JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row cart-savings-row" id="cart-savings-container" style="display: none; color: var(--success); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+        <span>Total Savings</span>
+        <span id="cart-savings-val">-₹0.00</span>
+      </div>
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span class="cart-total-price" id="cart-subtotal">₹0.00</span>
+      </div>
+      <button class="btn btn-terracotta cart-checkout-btn" id="checkout-trigger">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Painting Details Modal -->
+  <div class="modal-overlay" id="painting-modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="painting-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="detail-modal-grid">
+        <div class="detail-modal-image">
+          <img src="" alt="" id="modal-art-img" onerror="this.src='assets/paintings/sunset_solitude.png';">
+        </div>
+        <div class="detail-modal-info">
+          <h3 id="modal-art-title">Painting Title</h3>
+          <div class="detail-modal-meta" id="modal-art-meta">Medium • Size</div>
+          <p class="detail-modal-desc" id="modal-art-desc">Painting description...</p>
+          
+          <div class="detail-modal-actions" style="margin-top: 2rem;">
+            <button class="btn btn-primary" id="modal-art-buy-btn" style="width: 100%;">Add to Bag</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Checkout Multi-Step Modal -->
+  <div class="modal-overlay" id="checkout-modal-overlay">
+    <div class="modal-container checkout-modal-container">
+      <button class="modal-close-btn" id="checkout-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="checkout-steps">
+        <div class="step-node active" id="step-node-1" data-step="1">1</div>
+        <div class="step-node" id="step-node-2" data-step="2">2</div>
+        <div class="step-node" id="step-node-3" data-step="3">3</div>
+      </div>
+
+      <!-- Step 1: Billing & Shipping Address -->
+      <div class="checkout-step-content active" id="step-content-1">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Shipping & Billing Information</h3>
+        <form id="checkout-form-address">
+          <div class="form-group">
+            <label for="chk-name">Full Name</label>
+            <input type="text" id="chk-name" required placeholder="Samridhi Sterling">
+          </div>
+          <div class="form-group">
+            <label for="chk-email">Email Address</label>
+            <input type="email" id="chk-email" required placeholder="Samridhi@example.com">
+          </div>
+          <div class="form-group" id="shipping-address-container">
+            <label for="chk-address">Shipping Address (For physical paintings)</label>
+            <input type="text" id="chk-address" placeholder="123 Gallery Lane, Portland, OR 97201">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continue to Payment</button>
+        </form>
+      </div>
+
+      <!-- Step 2: Payment Details -->
+      <div class="checkout-step-content" id="step-content-2">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Secure Checkout</h3>
+        
+        <div class="order-summary-box">
+          <div class="summary-row">
+            <span>Items Subtotal</span>
+            <span id="summary-subtotal">₹0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="summary-shipping">FREE</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total">₹0.00</span>
+          </div>
+        </div>
+
+        <form id="checkout-form-payment">
+          <div class="form-group">
+            <label for="chk-card-num">Card Number</label>
+            <input type="text" id="chk-card-num" required placeholder="4111 2222 3333 4444" maxlength="19">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="chk-card-expiry">Expiry Date</label>
+              <input type="text" id="chk-card-expiry" required placeholder="MM/YY" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label for="chk-card-cvc">CVC</label>
+              <input type="text" id="chk-card-cvc" required placeholder="123" maxlength="3">
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button type="button" class="btn btn-secondary" id="checkout-prev-btn" style="flex: 1;">Back</button>
+            <button type="submit" class="btn btn-terracotta" style="flex: 1.5;">Complete Order</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 3: Success Confirmation Screen -->
+      <div class="checkout-step-content" id="step-content-3">
+        <div class="success-screen">
+          <i class="fa-solid fa-circle-check"></i>
+          <h3>Thank you for your order!</h3>
+          <p>
+            Your payment was successfully processed. A confirmation email with order details has been sent to your email.
+          </p>
+          <button class="btn btn-primary" id="checkout-done-btn">Back to Category</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Page logic -->
+  <script src="bulk-gallery.js"></script>
+</body>
+</html>

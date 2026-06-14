@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Request a customized fine art painting commission by artist Samridhi. Tailored sizes, mediums, and subject matters for your home.">
+  <title>Commission Customized Art | Samridhi Art Studio</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* Specific overrides and layout additions for commission page */
+    .commission-page {
+      padding: calc(8rem + 35px) 5% 6rem;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at 10% 20%, rgba(197, 155, 63, 0.05) 0%, rgba(250, 249, 246, 0) 50%),
+                  radial-gradient(circle at 90% 80%, rgba(212, 106, 79, 0.05) 0%, rgba(250, 249, 246, 0) 50%);
+    }
+
+    .commission-form-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--card-shadow);
+      border-radius: 16px;
+      padding: 3rem;
+      max-width: 750px;
+      width: 100%;
+    }
+
+    .commission-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .commission-header h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .commission-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .form-group-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Full-screen success overlay for submission redirect */
+    .submission-success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-secondary);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      padding: 2rem;
+    }
+
+    .submission-success-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .submission-success-overlay i {
+      font-size: 5rem;
+      color: var(--success);
+      margin-bottom: 1.5rem;
+    }
+
+    .submission-success-overlay h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .submission-success-overlay p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin-bottom: 2rem;
+    }
+
+    .redirect-timer {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .redirect-timer i {
+      font-size: 1rem;
+      color: var(--accent-gold);
+      margin-bottom: 0;
+      animation: spin 3s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Promo Banner -->
+  <div class="top-promo-banner">
+    <i class="fa-solid fa-tags"></i> Bulk Order Special: Add any 5 or more paintings to your cart to unlock flat tiered discounts (Save up to 50%!)
+  </div>
+
+  <!-- Sticky Glassmorphic Header -->
+  <header id="app-header" class="scrolled">
+    <a href="index.html" class="logo">
+      Samridhi<span class="logo-dot"></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="shop.html" class="nav-link">Shop & Bulk</a></li>
+        <li><a href="commission.html" class="nav-link active">Customized Order</a></li>
+        <li><a href="index.html#courses" class="nav-link">Courses</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="shop.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-left"></i> Gallery</a>
+    </div>
+  </header>
+
+  <!-- Commission Customized Page -->
+  <main class="commission-page">
+    <div class="commission-form-container">
+      <div class="commission-header">
+        <h1>Customized Art Commission</h1>
+        <p>
+          Collaborate with Samridhi to create a unique painting tailored for your space. Please share your project details and info below.
+        </p>
+      </div>
+
+      <form id="commission-order-form">
+        <!-- Section 1: Contact Information -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="comm-name">Full Name</label>
+            <input type="text" id="comm-name" required placeholder="Samridhi Sterling">
+          </div>
+          <div class="form-group">
+            <label for="comm-email">Email Address</label>
+            <input type="email" id="comm-email" required placeholder="Samridhi@example.com">
+          </div>
+        </div>
+
+        <!-- Section 2: Artwork Specifications -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="comm-subject">Describe the Event</label>
+            <input type="text" id="comm-subject" required placeholder="e.g. Wedding, Anniversary, Birthday, Live Portrait">
+          </div>
+          <div class="form-group">
+            <label for="comm-medium">Preferred Painting Medium</label>
+            <select id="comm-medium" required>
+              <option value="" disabled selected>Select medium</option>
+              <option value="watercolor">Watercolor</option>
+              <option value="charcoal">Charcoal</option>
+              <option value="acrylic">Acrylic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="comm-size">Dimensions</label>
+            <select id="comm-size" required>
+              <option value="" disabled selected>Select size</option>
+              <option value="A4">A4 Size - 210 x 297 mm</option>
+              <option value="A3">A3 Size - 297 x 420 mm</option>
+              <option value="A2">A2 Size - 420 x 594 mm</option>
+              <option value="custom">Custom Size (specify below)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="comm-budget">Approximate Budget (INR)</label>
+            <select id="comm-budget" required>
+              <option value="" disabled selected>Select budget range</option>
+              <option value="1500-3000">₹1,500 – ₹3,000</option>
+              <option value="3000-5000">₹3,000 – ₹5,000</option>
+              <option value="5000-10000">₹5,000 – ₹10,000</option>
+              <option value="10000-plus">₹10,000 +</option>
+              <option value="open">Flexible / Open Budget</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 3: Vision Details -->
+        <div class="form-group">
+          <label for="comm-details">Details of your vision</label>
+          <textarea id="comm-details" rows="5" required placeholder="Tell Samridhi about the room, color palette references, mood, or custom size dimensions requested..."></textarea>
+          <div class="form-group-note">For example: 'I want a horizontal alpine sunset above a navy wall. I prefer warm rust, gold leaf, and ochre accents.'</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="comm-destination">Shipping Destination (Country / Zip Code)</label>
+            <input type="text" id="comm-destination" required placeholder="India (Zip 110001)">
+          </div>
+          <div class="form-group">
+            <label for="comm-deadline">Desired Deadline</label>
+            <input type="date" id="comm-deadline" required>
+            <div class="form-group-note">Minimum 4 days in the future.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comm-inspiration">Inspiration Image (Optional)</label>
+          <input type="file" id="comm-inspiration" accept="image/*" style="padding: 0.5rem 0;">
+          <div class="form-group-note">Upload a photo, sketch, or color reference to help Samridhi understand your vision.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+          Submit Commission Request
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Success Overlay with Redirect Timer -->
+  <div class="submission-success-overlay" id="comm-success-screen">
+    <i class="fa-solid fa-circle-check"></i>
+    <h2>Commission Request Sent!</h2>
+    <p>
+      Thank you for sharing your vision. A summary of your request has been logged. An email will be sent soon. Samridhi will review the details and follow up in 2-3 business days.
+    </p>
+    <div class="redirect-timer">
+      <i class="fa-solid fa-spinner"></i>
+      <span>Returning to home page in <span id="timer-sec">20</span> seconds...</span>
+    </div>
+  </div>
+
+  <script>
+    // Calculate and enforce min 4 days from today for deadline date
+    const deadlineInput = document.getElementById('comm-deadline');
+    if (deadlineInput) {
+      const minDate = new Date();
+      minDate.setDate(minDate.getDate() + 4);
+      const yyyy = minDate.getFullYear();
+      let mm = minDate.getMonth() + 1;
+      let dd = minDate.getDate();
+      if (dd < 10) dd = '0' + dd;
+      if (mm < 10) mm = '0' + mm;
+      deadlineInput.min = `${yyyy}-${mm}-${dd}`;
+    }
+
+    document.getElementById('commission-order-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting Vision...`;
+
+      // Mock submitting to server
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        
+        // Show success screen
+        const successOverlay = document.getElementById('comm-success-screen');
+        successOverlay.classList.add('active');
+        
+        // Timer countdown
+        let seconds = 20;
+        const secondsSpan = document.getElementById('timer-sec');
+        const interval = setInterval(() => {
+          seconds--;
+          secondsSpan.textContent = seconds;
+          if (seconds <= 0) {
+            clearInterval(interval);
+            window.location.href = "index.html";
+          }
+        }, 1000);
+
+      }, 1800);
+    });
+  </script>
+</body>
+</html>

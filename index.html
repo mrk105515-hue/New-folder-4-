@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore original fine art oil paintings and online painting courses by artist Samridhi. Transform your space and learn professional techniques.">
+  <title>Samridhi | Fine Art Portfolio, Shop & Academy</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Promo Banner -->
+  <div class="top-promo-banner">
+    <i class="fa-solid fa-tags"></i> Bulk Order Special: Add any 5 or more paintings to your cart to unlock flat tiered discounts (Save up to 50%!)
+  </div>
+
+  <!-- Sticky Glassmorphic Header -->
+  <header id="app-header">
+    <a href="#" class="logo" id="header-logo">
+      Samridhi<span class="logo-dot"></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#" class="nav-link active" data-target="home">Home</a></li>
+        <li><a href="shop.html" class="nav-link">Shop & Bulk</a></li>
+        <li><a href="commission.html" class="nav-link">Customized Order</a></li>
+        <li><a href="#courses" class="nav-link" data-target="courses">Courses</a></li>
+        <li><a href="#about" class="nav-link" data-target="about">About</a></li>
+        <li><a href="#contact" class="nav-link" data-target="contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="cart-icon-btn" id="cart-trigger" aria-label="Open shopping cart" id="btn-cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+      <button class="mobile-menu-btn" id="mobile-menu-trigger" aria-label="Toggle navigation menu">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-text">
+        <h1>
+          Capturing Light,<br>
+          <span>Painting Stories</span>
+        </h1>
+        <p>
+          Original fine art, luxurious gold-accented oil canvases, and comprehensive masterclasses designed to bring creativity into your living spaces and daily life.
+        </p>
+        <div class="hero-buttons">
+          <a href="shop.html" class="btn btn-primary">Shop Paintings</a>
+          <a href="#courses" class="btn btn-secondary">Explore Courses</a>
+          <a href="commission.html" class="btn btn-terracotta">Customized Order</a>
+        </div>
+      </div>
+      <div class="hero-artwork-showcase">
+        <div class="hero-frame-container">
+          <img src="assets/paintings/sunset_solitude.png" alt="Sunset Solitude featured painting" id="hero-featured-img">
+          <div class="hero-artwork-caption">
+            <div>
+              <h4>Sunset Solitude</h4>
+              <p>Oil on Canvas, 24" x 30"</p>
+            </div>
+            <button class="circle-btn hero-buy-btn" data-id="1" aria-label="Quick buy Sunset Solitude">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Interactive Room Preview Simulator -->
+  <section class="preview-room-section" id="room-preview">
+    <div class="preview-room-container">
+      
+      <!-- Simulator Workspace -->
+      <div class="simulator-window">
+        <!-- Main living room background -->
+        <div class="simulator-backdrop" id="simulator-bg" style="background-image: url('assets/living_room_bg.png');">
+          <!-- Multiplied color layer to tint the wall behind the couch -->
+          <div class="simulator-wall-color" id="simulator-wall-color"></div>
+          
+          <!-- Dynamic Floating Artwork Frame -->
+          <div class="room-wall-artwork-frame" id="simulator-art-frame">
+            <div class="room-wall-artwork" id="simulator-artwork-img" style="background-image: url('assets/paintings/sunset_solitude.png');"></div>
+            <!-- Dynamic Dimension Info overlay -->
+            <div class="artwork-dimension-tag" id="simulator-dimension-tag">24" x 30" (Original)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="simulator-controls">
+        <div class="sim-intro">
+          <h3>Virtual Wall Preview</h3>
+          <p>
+            Visualize how Samridhi's original oil paintings look scaled in a contemporary living space. Choose your wall color and switch artworks.
+          </p>
+        </div>
+        
+        <!-- Color Options -->
+        <div class="control-group">
+          <h4>Select Wall Color</h4>
+          <div class="wall-color-selectors">
+            <div class="color-option active" style="background: rgba(250, 249, 246, 0.4);" data-color="transparent" title="Alabaster White"></div>
+            <div class="color-option" style="background: rgba(84, 98, 93, 0.95);" data-color="rgba(84, 98, 93, 0.6)" title="Sage Green"></div>
+            <div class="color-option" style="background: rgba(27, 38, 59, 0.95);" data-color="rgba(27, 38, 59, 0.6)" title="Deep Indigo"></div>
+            <div class="color-option" style="background: rgba(142, 108, 95, 0.95);" data-color="rgba(142, 108, 95, 0.6)" title="Terracotta Dust"></div>
+            <div class="color-option" style="background: rgba(43, 45, 66, 0.95);" data-color="rgba(43, 45, 66, 0.6)" title="Charcoal Grey"></div>
+          </div>
+        </div>
+
+        <!-- Artwork selector -->
+        <div class="control-group sim-select-artwork">
+          <h4>Select Painting</h4>
+          <select id="simulator-art-selector">
+            <!-- Dynamically populated by JS -->
+          </select>
+        </div>
+
+        <div class="control-group">
+          <button class="btn btn-primary" id="simulator-buy-btn" style="width: 100%;">
+            <i class="fa-solid fa-cart-shopping"></i> Add Selected to Cart
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Academy & Online Courses Section -->
+  <section class="courses-section" id="courses">
+    <h2 class="section-title">Online Art Academy</h2>
+    
+    <div class="courses-grid" id="courses-grid-container">
+      <!-- Generated Dynamically by JS -->
+    </div>
+  </section>
+
+  <!-- About the Painter -->
+  <section class="about-section" id="about">
+    <div class="about-grid">
+      <div class="about-image-wrapper">
+        <div class="about-image-frame">
+          <img src="assets/artist_portrait.jpg" alt="Samridhi in her studio">
+        </div>
+      </div>
+      <div class="about-text">
+        <h3>Behind the Palette</h3>
+        <p>
+          Welcome to my art gallery. With six years of experience and Diploma in Fine Arts, I bring a strong foundation of technical skill to my work. You can confidently rely on my expertise for your practical assignments and other art.
+        </p>
+        
+        <div class="why-different-section" style="margin-top: 2rem;">
+          <h4 style="margin-bottom: 1rem; color: var(--text-primary);">Why my paintings are different?</h4>
+          <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;">
+            Each and every piece of art is made in accordance with the fundamentals, principles of painting and drawing best suited to gain you full marks in your practicals.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Commissions -->
+  <section class="contact-section" id="contact">
+    <div class="contact-container">
+      
+      <!-- Info block -->
+      <div class="contact-info-panel">
+        <div>
+          <h3>Get in Touch</h3>
+          <p>Whether you'd like to collaborate, request a custom painting commission, or have questions about a course, I'd love to hear from you.</p>
+        </div>
+        
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div>
+              <p class="text-secondary" style="font-size: 0.8rem; text-transform: uppercase;">Email</p>
+              <p style="color: var(--text-primary); font-weight: 600;">studio@Samridhivance.art</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <p class="text-secondary" style="font-size: 0.8rem; text-transform: uppercase;">Studio</p>
+              <p style="color: var(--text-primary); font-weight: 600;">Portland, Oregon, USA</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-secondary" style="margin-bottom: 0.75rem;">Follow my process:</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/samridhi_art_space/?hl=en" class="social-btn" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@Samridhi_art_space/" class="social-btn" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>Samridhi</h4>
+        <p>Modern fine art and academies dedicated to textures, palettes, and light-filled landscapes.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Art Studio</h4>
+        <ul>
+          <li><a href="shop.html">Browse Gallery</a></li>
+          <li><a href="#room-preview">Virtual Wall Simulator</a></li>
+          <li><a href="#about">Artist Statement</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Art Academy</h4>
+        <ul>
+          <li><a href="#courses">All Courses</a></li>
+          <li><a href="#about">Student Portal</a></li>
+          <li><a href="#contact">Syllabus Inquiries</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Help & Info</h4>
+        <ul>
+          <li><a href="shipping-policy.html">Shipping & Delivery</a></li>
+          <li><a href="refund-policy.html">Refunds & Returns</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Samridhi Fine Art. All rights reserved.</p>
+      <p>Designed with love for creators.</p>
+    </div>
+  </footer>
+
+  <!-- Slide-out Shopping Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Bag</h3>
+      <button class="cart-close-btn" id="cart-close" aria-label="Close cart drawer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items" id="cart-items-container">
+      <!-- Generated Dynamically by JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row cart-savings-row" id="cart-savings-container" style="display: none; color: var(--success); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+        <span>Total Savings</span>
+        <span id="cart-savings-val">-₹0.00</span>
+      </div>
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span class="cart-total-price" id="cart-subtotal">₹0.00</span>
+      </div>
+      <button class="btn btn-terracotta cart-checkout-btn" id="checkout-trigger">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Painting Details Modal -->
+  <div class="modal-overlay" id="painting-modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="painting-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="detail-modal-grid">
+        <div class="detail-modal-image">
+          <img src="" alt="" id="modal-art-img">
+        </div>
+        <div class="detail-modal-info">
+          <h3 id="modal-art-title">Painting Title</h3>
+          <div class="detail-modal-meta" id="modal-art-meta">Oil on Canvas, 24" x 30"</div>
+          <p class="detail-modal-desc" id="modal-art-desc">Painting description goes here...</p>
+          
+          <div class="detail-modal-options">
+            <div id="modal-art-options-list">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+
+          <div class="detail-modal-actions">
+            <button class="btn btn-primary" id="modal-art-buy-btn" style="flex: 1;">Add to Bag</button>
+            <button class="btn btn-secondary" id="modal-art-room-btn" title="View in living room">
+              <i class="fa-solid fa-eye"></i> Preview in Room
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Curriculum Modal -->
+  <div class="modal-overlay" id="course-modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="course-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="detail-modal-grid">
+        <div class="detail-modal-image">
+          <img src="" alt="" id="modal-course-img">
+        </div>
+        <div class="detail-modal-info">
+          <h3 id="modal-course-title">Course Title</h3>
+          <div class="detail-modal-meta" id="modal-course-meta">8 Weeks • Intermediate</div>
+          <p class="detail-modal-desc" id="modal-course-desc">Course curriculum details go here...</p>
+          
+          <div class="detail-modal-options" style="background: rgba(224, 122, 95, 0.08); border-color: rgba(224, 122, 95, 0.15);">
+            <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-terracotta); margin-bottom: 0.5rem;">What is included</h4>
+            <ul style="list-style: none; font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.4rem;" id="modal-course-inclusions">
+              <!-- Rendered Dynamically -->
+            </ul>
+          </div>
+
+          <div class="detail-modal-actions">
+            <button class="btn btn-terracotta" id="modal-course-buy-btn" style="width: 100%;">Enroll in Academy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Multi-Step Modal -->
+  <div class="modal-overlay" id="checkout-modal-overlay">
+    <div class="modal-container checkout-modal-container">
+      <button class="modal-close-btn" id="checkout-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="checkout-steps">
+        <div class="step-node active" id="step-node-1" data-step="1">1</div>
+        <div class="step-node" id="step-node-2" data-step="2">2</div>
+        <div class="step-node" id="step-node-3" data-step="3">3</div>
+      </div>
+
+      <!-- Step 1: Billing & Shipping Address -->
+      <div class="checkout-step-content active" id="step-content-1">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Shipping & Billing Information</h3>
+        <form id="checkout-form-address">
+          <div class="form-group">
+            <label for="chk-name">Full Name</label>
+            <input type="text" id="chk-name" required placeholder="Samridhi Sterling">
+          </div>
+          <div class="form-group">
+            <label for="chk-email">Email Address</label>
+            <input type="email" id="chk-email" required placeholder="Samridhi@example.com">
+          </div>
+          <div class="form-group" id="shipping-address-container">
+            <label for="chk-address">Shipping Address (For physical paintings)</label>
+            <input type="text" id="chk-address" placeholder="123 Gallery Lane, Portland, OR 97201">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continue to Payment</button>
+        </form>
+      </div>
+
+      <!-- Step 2: Payment Details -->
+      <div class="checkout-step-content" id="step-content-2">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Secure Checkout</h3>
+        
+        <div class="order-summary-box">
+          <div class="summary-row">
+            <span>Items Subtotal</span>
+            <span id="summary-subtotal">₹0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="summary-shipping">FREE</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total">₹0.00</span>
+          </div>
+        </div>
+
+        <form id="checkout-form-payment">
+          <div class="form-group">
+            <label for="chk-card-num">Card Number</label>
+            <input type="text" id="chk-card-num" required placeholder="4111 2222 3333 4444" maxlength="19">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="chk-card-expiry">Expiry Date</label>
+              <input type="text" id="chk-card-expiry" required placeholder="MM/YY" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label for="chk-card-cvc">CVC</label>
+              <input type="text" id="chk-card-cvc" required placeholder="123" maxlength="3">
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button type="button" class="btn btn-secondary" id="checkout-prev-btn" style="flex: 1;">Back</button>
+            <button type="submit" class="btn btn-terracotta" style="flex: 1.5;">Complete Order</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 3: Success Confirmation Screen -->
+      <div class="checkout-step-content" id="step-content-3">
+        <div class="success-screen">
+          <i class="fa-solid fa-circle-check"></i>
+          <h3>Thank you for your order!</h3>
+          <p>
+            Your payment was successfully processed. A confirmation email with order details and academy course portal login credentials has been sent to your email.
+          </p>
+          <button class="btn btn-primary" id="checkout-done-btn">Back to Gallery</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Custom App JS -->
+  <script src="app.js"></script>
+</body>
+</html>

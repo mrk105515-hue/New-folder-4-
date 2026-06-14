@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shop original fine art canvases by artist Samridhi and calculate bulk art commissions. Watercolor landscapes, still life, folk art, and pencil sketches.">
+  <title>Art Shop & Bulk Orders | Samridhi Art Studio</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* Specific overrides and layout additions for shop page */
+    .shop-page-hero {
+      padding: calc(8rem + 35px) 5% 4rem;
+      text-align: center;
+      background: radial-gradient(circle at 50% 50%, rgba(197, 155, 63, 0.05) 0%, rgba(250, 249, 246, 0) 70%);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .shop-page-hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .shop-page-hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Bulk Order Section */
+    .bulk-order-section {
+      padding: 6rem 5%;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .bulk-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .bulk-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .bulk-header h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .bulk-header h2::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background: var(--accent-terracotta);
+      margin: 0.75rem auto 0;
+      border-radius: 2px;
+    }
+
+    .bulk-header p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Bulk Categories Grid */
+    .bulk-categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .bulk-cat-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: var(--transition-bounce);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bulk-cat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow);
+      border-color: rgba(197, 155, 63, 0.3);
+    }
+
+    .bulk-cat-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--accent-gold);
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .bulk-cat-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .bulk-cat-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Bulk Order Calculator Styling */
+    .bulk-calculator-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-primary);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 3rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .bulk-calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    .bulk-calc-form h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--glass-border);
+      padding-bottom: 0.5rem;
+    }
+
+    .bulk-calc-results {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 2rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 1rem;
+    }
+
+    .calc-row:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .calc-row span {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .calc-row strong {
+      font-size: 1.25rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .calc-row.total-row strong {
+      font-size: 1.8rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .calc-row.savings-row strong {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .bulk-inquire-btn {
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    /* Success Full-Screen Countdown Overlay */
+    .bulk-success-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-secondary);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      padding: 2rem;
+    }
+
+    .bulk-success-screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .bulk-success-screen i.fa-circle-check {
+      font-size: 5rem;
+      color: var(--success);
+      margin-bottom: 1.5rem;
+    }
+
+    .bulk-success-screen h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .bulk-success-screen p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin-bottom: 2rem;
+    }
+
+    .bulk-timer-container {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bulk-timer-container i {
+      font-size: 1rem;
+      color: var(--accent-gold);
+      animation: spin 3s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .bulk-calc-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .bulk-calculator-wrapper {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Promo Banner -->
+  <div class="top-promo-banner">
+    <i class="fa-solid fa-tags"></i> Bulk Order Special: Add any 5 or more paintings to your cart to unlock flat tiered discounts (Save up to 50%!)
+  </div>
+
+  <!-- Sticky Glassmorphic Header -->
+  <header id="app-header" class="scrolled">
+    <a href="index.html" class="logo">
+      Samridhi<span class="logo-dot"></span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="shop.html" class="nav-link active">Shop & Bulk</a></li>
+        <li><a href="commission.html" class="nav-link">Customized Order</a></li>
+        <li><a href="index.html#courses" class="nav-link">Courses</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="cart-icon-btn" id="cart-trigger" aria-label="Open shopping cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+      <button class="mobile-menu-btn" id="mobile-menu-trigger" aria-label="Toggle navigation menu">
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Shop Hero Section -->
+  <section class="shop-page-hero">
+    <h1>Art Shop & Gallery</h1>
+    <p>
+      Browse and purchase original acrylic canvases, or request tailored bulk orders directly from the studio.
+    </p>
+  </section>
+
+  <!-- Paintings Store Gallery Section -->
+  <section class="gallery-section" id="gallery" style="padding-top: 4rem;">
+    <!-- Filters & Search Panel -->
+    <div class="gallery-filters">
+      <div class="filters-top">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="gallery-search" placeholder="Search by title, medium, keyword...">
+        </div>
+        <div class="sort-container">
+          <label for="gallery-sort" class="text-secondary">Sort by:</label>
+          <select id="gallery-sort">
+            <option value="featured">Featured Collection</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="size-desc">Size: Large to Small</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-chips" id="filter-chips-container">
+        <!-- Generated Dynamically by JS -->
+      </div>
+    </div>
+
+    <!-- Artworks Grid -->
+    <div class="artwork-grid" id="artwork-grid-container">
+      <!-- Generated Dynamically by JS -->
+    </div>
+  </section>
+
+
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>Samridhi</h4>
+        <p>Modern fine art and academies dedicated to textures, palettes, and light-filled landscapes.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Art Studio</h4>
+        <ul>
+          <li><a href="shop.html">Browse Gallery</a></li>
+          <li><a href="index.html#room-preview">Virtual Wall Simulator</a></li>
+          <li><a href="index.html#about">Artist Statement</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Art Academy</h4>
+        <ul>
+          <li><a href="index.html#courses">All Courses</a></li>
+          <li><a href="index.html#about">Student Portal</a></li>
+          <li><a href="index.html#contact">Syllabus Inquiries</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Help & Info</h4>
+        <ul>
+          <li><a href="shipping-policy.html">Shipping & Delivery</a></li>
+          <li><a href="refund-policy.html">Refunds & Returns</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Samridhi Fine Art. All rights reserved.</p>
+      <p>Designed with love for creators.</p>
+    </div>
+  </footer>
+
+  <!-- Slide-out Shopping Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Your Bag</h3>
+      <button class="cart-close-btn" id="cart-close" aria-label="Close cart drawer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="cart-items" id="cart-items-container">
+      <!-- Generated Dynamically by JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row cart-savings-row" id="cart-savings-container" style="display: none; color: var(--success); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+        <span>Total Savings</span>
+        <span id="cart-savings-val">-₹0.00</span>
+      </div>
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span class="cart-total-price" id="cart-subtotal">₹0.00</span>
+      </div>
+      <button class="btn btn-terracotta cart-checkout-btn" id="checkout-trigger">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Painting Details Modal (Omit Room button because room simulator is on home page) -->
+  <div class="modal-overlay" id="painting-modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close-btn" id="painting-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="detail-modal-grid">
+        <div class="detail-modal-image">
+          <img src="" alt="" id="modal-art-img">
+        </div>
+        <div class="detail-modal-info">
+          <h3 id="modal-art-title">Painting Title</h3>
+          <div class="detail-modal-meta" id="modal-art-meta">Medium • Size</div>
+          <p class="detail-modal-desc" id="modal-art-desc">Painting description...</p>
+          
+          <div class="detail-modal-options">
+            <div id="modal-art-options-list">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+
+          <div class="detail-modal-actions">
+            <button class="btn btn-primary" id="modal-art-buy-btn" style="width: 100%;">Add to Bag</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Checkout Multi-Step Modal -->
+  <div class="modal-overlay" id="checkout-modal-overlay">
+    <div class="modal-container checkout-modal-container">
+      <button class="modal-close-btn" id="checkout-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="checkout-steps">
+        <div class="step-node active" id="step-node-1" data-step="1">1</div>
+        <div class="step-node" id="step-node-2" data-step="2">2</div>
+        <div class="step-node" id="step-node-3" data-step="3">3</div>
+      </div>
+
+      <!-- Step 1: Billing & Shipping Address -->
+      <div class="checkout-step-content active" id="step-content-1">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Shipping & Billing Information</h3>
+        <form id="checkout-form-address">
+          <div class="form-group">
+            <label for="chk-name">Full Name</label>
+            <input type="text" id="chk-name" required placeholder="Samridhi Sterling">
+          </div>
+          <div class="form-group">
+            <label for="chk-email">Email Address</label>
+            <input type="email" id="chk-email" required placeholder="Samridhi@example.com">
+          </div>
+          <div class="form-group" id="shipping-address-container">
+            <label for="chk-address">Shipping Address (For physical paintings)</label>
+            <input type="text" id="chk-address" placeholder="123 Gallery Lane, Portland, OR 97201">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continue to Payment</button>
+        </form>
+      </div>
+
+      <!-- Step 2: Payment Details -->
+      <div class="checkout-step-content" id="step-content-2">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Secure Checkout</h3>
+        
+        <div class="order-summary-box">
+          <div class="summary-row">
+            <span>Items Subtotal</span>
+            <span id="summary-subtotal">₹0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="summary-shipping">FREE</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total">₹0.00</span>
+          </div>
+        </div>
+
+        <form id="checkout-form-payment">
+          <div class="form-group">
+            <label for="chk-card-num">Card Number</label>
+            <input type="text" id="chk-card-num" required placeholder="4111 2222 3333 4444" maxlength="19">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="chk-card-expiry">Expiry Date</label>
+              <input type="text" id="chk-card-expiry" required placeholder="MM/YY" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label for="chk-card-cvc">CVC</label>
+              <input type="text" id="chk-card-cvc" required placeholder="123" maxlength="3">
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button type="button" class="btn btn-secondary" id="checkout-prev-btn" style="flex: 1;">Back</button>
+            <button type="submit" class="btn btn-terracotta" style="flex: 1.5;">Complete Order</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 3: Success Confirmation Screen -->
+      <div class="checkout-step-content" id="step-content-3">
+        <div class="success-screen">
+          <i class="fa-solid fa-circle-check"></i>
+          <h3>Thank you for your order!</h3>
+          <p>
+            Your payment was successfully processed. A confirmation email with order details has been sent to your email.
+          </p>
+          <button class="btn btn-primary" id="checkout-done-btn">Back to Shop</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Shop page logic -->
+  <script src="shop.js"></script>
+</body>
+</html>
