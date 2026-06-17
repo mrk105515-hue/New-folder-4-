@@ -742,33 +742,82 @@ function initCheckout() {
   paymentForm.addEventListener("submit", (e) => {
     e.preventDefault();
     
-    // Simulate payment loading
+    const nameVal = document.getElementById("chk-name").value;
+    const emailVal = document.getElementById("chk-email").value;
+    const addressVal = document.getElementById("chk-address") ? document.getElementById("chk-address").value : "";
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const amountInPaise = Math.round(subtotal * 100);
+
     const paySubmitBtn = paymentForm.querySelector('button[type="submit"]');
     const originalText = paySubmitBtn.textContent;
     paySubmitBtn.disabled = true;
-    paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
+    paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Launching Razorpay...`;
 
-    setTimeout(() => {
+    const options = {
+      "key": "rzp_test_T2f89ISOl8Q1dr",
+      "amount": amountInPaise,
+      "currency": "INR",
+      "name": "Samridhi Art Studio",
+      "description": "Art Store Purchase",
+      "image": "assets/artist_portrait.jpg",
+      "handler": function (response) {
+        paySubmitBtn.disabled = false;
+        paySubmitBtn.textContent = originalText;
+
+        // Update original painting availabilities locally to show sold status
+        cart.forEach(item => {
+          if (item.type === "original") {
+            const paintObj = paintings.find(p => p.id === item.id);
+            if (paintObj) paintObj.available = false;
+          }
+        });
+        
+        // Reset cart
+        cart = [];
+        saveCart();
+        updateCartUI();
+        if (typeof renderGallery === "function") renderGallery();
+        if (typeof initSimulator === "function") initSimulator(); // re-initialize simulator select dropdown labels
+
+        // Render real Payment ID in Step 3 success screen
+        const successParagraph = document.querySelector(".success-screen p");
+        if (successParagraph) {
+          successParagraph.innerHTML = `Your payment was successfully processed. Razorpay Payment ID: <strong>${response.razorpay_payment_id}</strong>. A confirmation email with details and credentials has been sent to your email.`;
+        }
+
+        openCheckoutStep(3);
+      },
+      "modal": {
+        "ondismiss": function() {
+          paySubmitBtn.disabled = false;
+          paySubmitBtn.textContent = originalText;
+        }
+      },
+      "prefill": {
+        "name": nameVal,
+        "email": emailVal
+      },
+      "notes": {
+        "address": addressVal
+      },
+      "theme": {
+        "color": "#D46A4F"
+      }
+    };
+
+    try {
+      const rzp = new Razorpay(options);
+      rzp.on('payment.failed', function (response){
+          alert("Payment failed: " + response.error.description);
+          paySubmitBtn.disabled = false;
+          paySubmitBtn.textContent = originalText;
+      });
+      rzp.open();
+    } catch (err) {
+      alert("Error launching Razorpay: " + err.message);
       paySubmitBtn.disabled = false;
       paySubmitBtn.textContent = originalText;
-      
-      // Update original painting availabilities locally to show sold status
-      cart.forEach(item => {
-        if (item.type === "original") {
-          const paintObj = paintings.find(p => p.id === item.id);
-          if (paintObj) paintObj.available = false;
-        }
-      });
-      
-      // Reset cart
-      cart = [];
-      saveCart();
-      updateCartUI();
-      renderGallery();
-      initSimulator(); // re-initialize simulator select dropdown labels
-
-      openCheckoutStep(3);
-    }, 2000);
+    }
   });
 
   // Finished checkout button

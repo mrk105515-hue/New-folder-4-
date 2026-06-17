@@ -508,24 +508,16 @@
         </div>
 
         <form id="checkout-form-payment">
-          <div class="form-group">
-            <label for="chk-card-num">Card Number</label>
-            <input type="text" id="chk-card-num" required placeholder="4111 2222 3333 4444" maxlength="19">
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="chk-card-expiry">Expiry Date</label>
-              <input type="text" id="chk-card-expiry" required placeholder="MM/YY" maxlength="5">
-            </div>
-            <div class="form-group">
-              <label for="chk-card-cvc">CVC</label>
-              <input type="text" id="chk-card-cvc" required placeholder="123" maxlength="3">
-            </div>
+          <div class="razorpay-info-box" style="background: rgba(197, 155, 63, 0.05); border: 1px solid var(--glass-border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; text-align: center;">
+            <i class="fa-solid fa-shield-halved" style="color: var(--accent-gold); font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Payments are securely processed via <strong>Razorpay</strong>. You can pay using Cards, UPI, Netbanking, or Wallets.
+            </p>
           </div>
           
           <div style="display: flex; gap: 1rem; margin-top: 1rem;">
             <button type="button" class="btn btn-secondary" id="checkout-prev-btn" style="flex: 1;">Back</button>
-            <button type="submit" class="btn btn-terracotta" style="flex: 1.5;">Complete Order</button>
+            <button type="submit" class="btn btn-terracotta" style="flex: 1.5;">Pay with Razorpay</button>
           </div>
         </form>
       </div>
@@ -545,6 +537,8 @@
     </div>
   </div>
 
+  <!-- Razorpay Standard Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <!-- Shop page logic -->
   <script src="shop.js"></script>
 </body>
