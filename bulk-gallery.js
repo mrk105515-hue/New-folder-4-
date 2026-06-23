@@ -758,9 +758,71 @@ function initCheckout() {
       rzp.open();
 
     } catch (err) {
-      alert("Error initiating checkout: " + err.message);
-      paySubmitBtn.disabled = false;
-      paySubmitBtn.textContent = originalText;
+      console.warn("Backend API not reachable. Falling back to client-only checkout mode for static hosting (GitHub Pages):", err.message);
+      
+      const options = {
+        "key": "rzp_test_T59CvfIDapx588", // Client-side fallback Key ID
+        "amount": amountInPaise,
+        "currency": "INR",
+        "name": "Samridhi Art Studio",
+        "description": "Art Store Purchase (GitHub Pages)",
+        "image": "assets/artist_portrait.jpg",
+        "handler": function (response) {
+          paySubmitBtn.disabled = false;
+          paySubmitBtn.textContent = originalText;
+
+          // Update original painting availabilities locally to show sold status
+          cart.forEach(item => {
+            if (item.type === "original") {
+              const paintObj = paintings.find(p => p.id === item.id);
+              if (paintObj) paintObj.available = false;
+            }
+          });
+
+          cart = [];
+          saveCart();
+          updateCartUI();
+          if (typeof renderGallery === "function") renderGallery();
+          
+          // Render real Payment ID in Step 3 success screen
+          const successParagraph = document.querySelector(".success-screen p");
+          if (successParagraph) {
+            successParagraph.innerHTML = `Your payment was successfully processed. Razorpay Payment ID: <strong>${response.razorpay_payment_id}</strong>. (GitHub Pages static checkout simulation).`;
+          }
+
+          openCheckoutStep(3);
+        },
+        "modal": {
+          "ondismiss": function() {
+            paySubmitBtn.disabled = false;
+            paySubmitBtn.textContent = originalText;
+          }
+        },
+        "prefill": {
+          "name": nameVal,
+          "email": emailVal
+        },
+        "notes": {
+          "address": addressVal
+        },
+        "theme": {
+          "color": "#D46A4F"
+        }
+      };
+
+      try {
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response){
+            alert("Payment failed: " + response.error.description);
+            paySubmitBtn.disabled = false;
+            paySubmitBtn.textContent = originalText;
+        });
+        rzp.open();
+      } catch (fallbackErr) {
+        alert("Error initiating checkout: " + fallbackErr.message);
+        paySubmitBtn.disabled = false;
+        paySubmitBtn.textContent = originalText;
+      }
     }
   });
 
