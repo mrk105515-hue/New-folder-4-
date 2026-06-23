@@ -739,7 +739,7 @@ function initCheckout() {
   });
 
   // Payment form submission (complete purchase)
-  paymentForm.addEventListener("submit", (e) => {
+  paymentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     
     const nameVal = document.getElementById("chk-name").value;
@@ -751,61 +751,123 @@ function initCheckout() {
     const paySubmitBtn = paymentForm.querySelector('button[type="submit"]');
     const originalText = paySubmitBtn.textContent;
     paySubmitBtn.disabled = true;
-    paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Launching Razorpay...`;
-
-    const options = {
-      "key": "rzp_test_T2f89ISOl8Q1dr",
-      "amount": amountInPaise,
-      "currency": "INR",
-      "name": "Samridhi Art Studio",
-      "description": "Art Store Purchase",
-      "image": "assets/artist_portrait.jpg",
-      "handler": function (response) {
-        paySubmitBtn.disabled = false;
-        paySubmitBtn.textContent = originalText;
-
-        // Update original painting availabilities locally to show sold status
-        cart.forEach(item => {
-          if (item.type === "original") {
-            const paintObj = paintings.find(p => p.id === item.id);
-            if (paintObj) paintObj.available = false;
-          }
-        });
-        
-        // Reset cart
-        cart = [];
-        saveCart();
-        updateCartUI();
-        if (typeof renderGallery === "function") renderGallery();
-        if (typeof initSimulator === "function") initSimulator(); // re-initialize simulator select dropdown labels
-
-        // Render real Payment ID in Step 3 success screen
-        const successParagraph = document.querySelector(".success-screen p");
-        if (successParagraph) {
-          successParagraph.innerHTML = `Your payment was successfully processed. Razorpay Payment ID: <strong>${response.razorpay_payment_id}</strong>. A confirmation email with details and credentials has been sent to your email.`;
-        }
-
-        openCheckoutStep(3);
-      },
-      "modal": {
-        "ondismiss": function() {
-          paySubmitBtn.disabled = false;
-          paySubmitBtn.textContent = originalText;
-        }
-      },
-      "prefill": {
-        "name": nameVal,
-        "email": emailVal
-      },
-      "notes": {
-        "address": addressVal
-      },
-      "theme": {
-        "color": "#D46A4F"
-      }
-    };
+    paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
 
     try {
+      // 1. Fetch public config (KEY_ID)
+      const configResponse = await fetch('/api/config');
+      if (!configResponse.ok) throw new Error('Failed to fetch payment configuration');
+      const configData = await configResponse.json();
+      const keyId = configData.key_id;
+
+      if (!keyId) throw new Error('Razorpay Key ID is not configured on the server.');
+
+      // 2. Create order on the backend
+      const orderResponse = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          amount: amountInPaise,
+          currency: 'INR',
+          receipt: `receipt_${Date.now()}`
+        })
+      });
+
+      if (!orderResponse.ok) {
+        const errData = await orderResponse.json();
+        throw new Error(errData.error || 'Failed to create order');
+      }
+
+      const orderData = await orderResponse.json();
+      const orderId = orderData.order_id;
+
+      // 3. Configure Razorpay Standard Options
+      const options = {
+        "key": keyId,
+        "amount": orderData.amount,
+        "currency": orderData.currency,
+        "name": "Samridhi Art Studio",
+        "description": "Art Store Purchase",
+        "image": "assets/artist_portrait.jpg",
+        "order_id": orderId,
+        "handler": async function (response) {
+          paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...`;
+
+          try {
+            // 4. Verify payment signature on backend
+            const verifyResponse = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              })
+            });
+
+            if (!verifyResponse.ok) {
+              const verifyErr = await verifyResponse.json();
+              throw new Error(verifyErr.error || 'Payment verification failed');
+            }
+
+            const verifyResult = await verifyResponse.json();
+            if (verifyResult.verified) {
+              paySubmitBtn.disabled = false;
+              paySubmitBtn.textContent = originalText;
+
+              // Update original painting availabilities locally to show sold status
+              cart.forEach(item => {
+                if (item.type === "original") {
+                  const paintObj = paintings.find(p => p.id === item.id);
+                  if (paintObj) paintObj.available = false;
+                }
+              });
+              
+              // Reset cart
+              cart = [];
+              saveCart();
+              updateCartUI();
+              if (typeof renderGallery === "function") renderGallery();
+              if (typeof initSimulator === "function") initSimulator(); // re-initialize simulator select dropdown labels
+
+              // Render real Payment ID in Step 3 success screen
+              const successParagraph = document.querySelector(".success-screen p");
+              if (successParagraph) {
+                successParagraph.innerHTML = `Your payment was successfully processed and verified. Razorpay Payment ID: <strong>${response.razorpay_payment_id}</strong>. A confirmation email with details has been sent to your email.`;
+              }
+
+              openCheckoutStep(3);
+            } else {
+              throw new Error('Payment verification returned unsuccessful status');
+            }
+          } catch (verifyError) {
+            alert("Verification Error: " + verifyError.message);
+            paySubmitBtn.disabled = false;
+            paySubmitBtn.textContent = originalText;
+          }
+        },
+        "modal": {
+          "ondismiss": function() {
+            paySubmitBtn.disabled = false;
+            paySubmitBtn.textContent = originalText;
+          }
+        },
+        "prefill": {
+          "name": nameVal,
+          "email": emailVal
+        },
+        "notes": {
+          "address": addressVal
+        },
+        "theme": {
+          "color": "#D46A4F"
+        }
+      };
+
       const rzp = new Razorpay(options);
       rzp.on('payment.failed', function (response){
           alert("Payment failed: " + response.error.description);
@@ -813,8 +875,9 @@ function initCheckout() {
           paySubmitBtn.textContent = originalText;
       });
       rzp.open();
+
     } catch (err) {
-      alert("Error launching Razorpay: " + err.message);
+      alert("Error initiating checkout: " + err.message);
       paySubmitBtn.disabled = false;
       paySubmitBtn.textContent = originalText;
     }
