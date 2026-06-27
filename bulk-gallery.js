@@ -832,7 +832,7 @@ function initCheckout() {
 
       // 2. Configure Razorpay Options
       const options = {
-        "key": "rzp_test_T2f89ISOl8Q1dr",
+        "key": "rzp_test_T6WzOQYoLZuNWU",
         "amount": orderData.amount,
         "currency": orderData.currency,
         "name": "Samridhi Art Studio",
@@ -912,7 +912,7 @@ function initCheckout() {
       console.warn("Firebase Order failed or missing. Falling back to local/simulation mode:", err.message);
       
       const options = {
-        "key": "rzp_test_T2f89ISOl8Q1dr",
+        "key": "rzp_test_T6WzOQYoLZuNWU",
         "amount": amountInPaise,
         "currency": "INR",
         "name": "Samridhi Art Studio",

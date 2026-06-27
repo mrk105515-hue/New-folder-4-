@@ -961,7 +961,7 @@ function initCheckout() {
 
         // 2. Configure Razorpay Options
         const options = {
-          "key": "rzp_test_T2f89ISOl8Q1dr", // Public Razorpay test key
+          "key": "rzp_test_T6WzOQYoLZuNWU", // Public Razorpay test key
           "amount": orderData.amount,
           "currency": orderData.currency,
           "name": "Samridhi Art Studio",
@@ -1045,7 +1045,7 @@ function initCheckout() {
         
         // Fallback client-only mode
         const options = {
-          "key": "rzp_test_T2f89ISOl8Q1dr",
+          "key": "rzp_test_T6WzOQYoLZuNWU",
           "amount": amountInPaise,
           "currency": "INR",
           "name": "Samridhi Art Studio",
