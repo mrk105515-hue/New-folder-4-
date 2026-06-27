@@ -75,19 +75,6 @@ const paintings = [
     category: "mixed",
     available: false, // Sold Out Original
     description: "Delicate textured wildflowers blooming against a rich dark charcoal backdrop. Samridhi combines high-quality oil pigments with luxurious gold leaf details to create depth and botanical texture."
-  },
-  {
-    id: 5,
-    title: "1 Rupee Test Painting",
-    medium: "Digital Art Test",
-    priceOriginal: 1,
-    widthInches: 8,
-    heightInches: 10,
-    image: "assets/artist_portrait.jpg",
-    featured: true,
-    category: "mixed",
-    available: true,
-    description: "A ₹1 test item created specifically to test the live Razorpay payment gateway integration safely."
   }
 ];
 
