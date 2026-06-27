@@ -128,6 +128,69 @@ const bulkPaintings = {
       dimensions: "A3 Size",
       image: "assets/paintings/bulk/watercolor_landscape_village_path.jpg",
       description: "A rustic village lane winding past thatched huts and lush green trees."
+    },
+    {
+      id: "wl6",
+      title: "Folk Art Peacock",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
+      description: "A vibrant watercolor depiction of a ceremonial peacock with intricate details."
+    },
+    {
+      id: "wl7",
+      title: "Decorative Floral Vase",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM (1).jpeg",
+      description: "A classic watercolor composition of flowers in a decorative traditional vase."
+    },
+    {
+      id: "wl8",
+      title: "Royal Elephant Portrait",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM (1).jpeg",
+      description: "A detailed watercolor illustration of a ceremonial royal elephant in profile."
+    },
+    {
+      id: "wl9",
+      title: "Lotus Pond Harmony",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.27 PM.jpeg",
+      description: "A peaceful composition of blooming lotuses and stylized waves in watercolor."
+    },
+    {
+      id: "wl10",
+      title: "Folk Bird in Vines",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.28 PM (1).jpeg",
+      description: "A stylized bird perched amidst decorative floral vines and swirling leaves."
+    },
+    {
+      id: "wl11",
+      title: "Traditional Border Art",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.28 PM.jpeg",
+      description: "A repetitive traditional border pattern showcasing fine lining and brush precision."
+    },
+    {
+      id: "wl12",
+      title: "Forest Deer Study",
+      medium: "Watercolor on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.29 PM.jpeg",
+      description: "A stylized representation of a deer in a mythical forest setting in watercolor."
     }
   ],
   "watercolor-folk-art": [
@@ -139,6 +202,24 @@ const bulkPaintings = {
       dimensions: "A3 Size",
       image: "assets/paintings/bulk/watercolor_folk_art_elephant.jpg",
       description: "A decorated traditional Indian elephant with fine patterns, lines, and stripes in folk art style."
+    },
+    {
+      id: "wf2",
+      title: "Golden Flora Study",
+      medium: "Folk Art Watercolor",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
+      description: "An intricate traditional floral study featuring rich pigment textures and patterns."
+    },
+    {
+      id: "wf3",
+      title: "Mandala Pattern",
+      medium: "Folk Art Watercolor",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM.jpeg",
+      description: "A beautifully detailed circular mandala pattern showcasing symmetry and folk geometry."
     }
   ],
   "still-life": [
@@ -168,6 +249,24 @@ const bulkPaintings = {
       dimensions: "A3 Size",
       image: "assets/paintings/bulk/pencil_still_life_jug_fruit.jpg",
       description: "A detailed graphite study of a traditional jug, apple, and pear capturing fine textures and light source gradients."
+    },
+    {
+      id: "sl4",
+      title: "Textured Botanical Sketch",
+      medium: "Graphite on Paper",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM.jpeg",
+      description: "A delicate study of botanical leaves and stems highlighting organic textures."
+    },
+    {
+      id: "sl5",
+      title: "Symmetrical Bloom",
+      medium: "Watercolor Still Life",
+      price: 200,
+      dimensions: "A3 Size",
+      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM.jpeg",
+      description: "A traditional symmetrical floral pattern featuring vibrant hand-painted details."
     }
   ]
 };
