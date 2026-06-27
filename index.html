@@ -35,6 +35,9 @@
       </ul>
     </nav>
     <div class="header-actions">
+      <div class="user-status-btn" id="user-profile-btn" style="cursor: pointer; font-size: 1.25rem; color: var(--text-primary); margin-right: 0.75rem; display: flex; align-items: center;" title="Sign In / Account">
+        <i class="fa-regular fa-user" id="user-status-icon"></i>
+      </div>
       <button class="cart-icon-btn" id="cart-trigger" aria-label="Open shopping cart" id="btn-cart">
         <i class="fa-solid fa-bag-shopping"></i>
         <span class="cart-badge" id="cart-count">0</span>
@@ -356,22 +359,47 @@
 
       <!-- Step 1: Billing & Shipping Address -->
       <div class="checkout-step-content active" id="step-content-1">
-        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Shipping & Billing Information</h3>
-        <form id="checkout-form-address">
-          <div class="form-group">
-            <label for="chk-name">Full Name</label>
-            <input type="text" id="chk-name" required placeholder="Samridhi Sterling">
+        <!-- Auth Container (Visible when logged out) -->
+        <div id="checkout-auth-container" style="display: block;">
+          <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);" id="auth-title">Log In to Checkout</h3>
+          <form id="checkout-auth-form">
+            <div class="form-group">
+              <label for="auth-email">Email Address</label>
+              <input type="email" id="auth-email" required placeholder="samridhi@example.com">
+            </div>
+            <div class="form-group">
+              <label for="auth-password">Password</label>
+              <input type="password" id="auth-password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn btn-terracotta" style="width: 100%; margin-top: 1rem;" id="auth-submit-btn">Log In</button>
+          </form>
+          <p style="font-size: 0.9rem; text-align: center; margin-top: 1rem; color: var(--text-secondary);">
+            Don't have an account? <a href="#" id="auth-toggle-link" style="color: var(--accent-terracotta); text-decoration: underline;">Register</a>
+          </p>
+        </div>
+
+        <!-- Shipping Container (Visible when logged in) -->
+        <div id="checkout-shipping-container" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.5rem; color: var(--text-primary); margin: 0;">Shipping Information</h3>
+            <button type="button" class="btn btn-secondary btn-sm" id="checkout-logout-btn">Log Out</button>
           </div>
-          <div class="form-group">
-            <label for="chk-email">Email Address</label>
-            <input type="email" id="chk-email" required placeholder="Samridhi@example.com">
-          </div>
-          <div class="form-group" id="shipping-address-container">
-            <label for="chk-address">Shipping Address (For physical paintings)</label>
-            <input type="text" id="chk-address" placeholder="123 Gallery Lane, Portland, OR 97201">
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continue to Payment</button>
-        </form>
+          <form id="checkout-form-address">
+            <div class="form-group">
+              <label for="chk-name">Full Name</label>
+              <input type="text" id="chk-name" required placeholder="Samridhi Sterling">
+            </div>
+            <div class="form-group">
+              <label for="chk-email">Email Address</label>
+              <input type="email" id="chk-email" required placeholder="Samridhi@example.com" readonly style="opacity: 0.7; background: #e9ecef;">
+            </div>
+            <div class="form-group" id="shipping-address-container">
+              <label for="chk-address">Shipping Address (For physical paintings)</label>
+              <input type="text" id="chk-address" placeholder="123 Gallery Lane, Portland, OR 97201">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continue to Payment</button>
+          </form>
+        </div>
       </div>
 
       <!-- Step 2: Payment Details -->
@@ -423,6 +451,11 @@
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
   <!-- Razorpay Standard Checkout SDK -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <!-- Custom App JS -->

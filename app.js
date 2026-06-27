@@ -1,3 +1,27 @@
+// Firebase Configuration (Replace with your actual Firebase project config values)
+const firebaseConfig = {
+  apiKey: "AIzaSyBzbHVoBlL3HbjJkypfTE5Qvj1amICtwwg",
+  authDomain: "swarnim-store.firebaseapp.com",
+  projectId: "swarnim-store",
+  storageBucket: "swarnim-store.firebasestorage.app",
+  messagingSenderId: "460537722995",
+  appId: "1:460537722995:web:44770c0895c1b127199206",
+  measurementId: "G-CH1E37H3RZ"
+};
+
+// Initialize Firebase compat
+let auth, db, functions;
+if (typeof firebase !== 'undefined') {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+    functions = firebase.functions();
+  } catch (err) {
+    console.error("Firebase initialization failed:", err);
+  }
+}
+
 // Application Data
 const paintings = [
   {
@@ -701,7 +725,6 @@ function closeCourseModal() {
 /* Checkout Wizard Multi-Step Flow */
 function initCheckout() {
   const checkoutTrigger = document.getElementById("checkout-trigger");
-  if (!checkoutTrigger) return;
   const checkoutOverlay = document.getElementById("checkout-modal-overlay");
   const checkoutClose = document.getElementById("checkout-modal-close");
   const addressForm = document.getElementById("checkout-form-address");
@@ -709,229 +732,306 @@ function initCheckout() {
   const prevBtn = document.getElementById("checkout-prev-btn");
   const doneBtn = document.getElementById("checkout-done-btn");
 
+  // Auth form elements
+  const authForm = document.getElementById("checkout-auth-form");
+  const authTitle = document.getElementById("auth-title");
+  const authSubmitBtn = document.getElementById("auth-submit-btn");
+  const authToggleLink = document.getElementById("auth-toggle-link");
+  const logoutBtn = document.getElementById("checkout-logout-btn");
+  const userProfileBtn = document.getElementById("user-profile-btn");
+
+  let isRegisterMode = false;
+
+  // Toggle register/login mode
+  if (authToggleLink) {
+    authToggleLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      isRegisterMode = !isRegisterMode;
+      if (isRegisterMode) {
+        if (authTitle) authTitle.textContent = "Create Account";
+        if (authSubmitBtn) authSubmitBtn.textContent = "Register";
+        authToggleLink.textContent = "Log In";
+        const labelNode = authToggleLink.previousSibling;
+        if (labelNode) labelNode.textContent = "Already have an account? ";
+      } else {
+        if (authTitle) authTitle.textContent = "Log In to Checkout";
+        if (authSubmitBtn) authSubmitBtn.textContent = "Log In";
+        authToggleLink.textContent = "Register";
+        const labelNode = authToggleLink.previousSibling;
+        if (labelNode) labelNode.textContent = "Don't have an account? ";
+      }
+    });
+  }
+
+  // Handle Authentication submit
+  if (authForm && authSubmitBtn) {
+    authForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("auth-email").value.trim();
+      const password = document.getElementById("auth-password").value;
+
+      authSubmitBtn.disabled = true;
+      const originalText = authSubmitBtn.textContent;
+      authSubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
+
+      try {
+        if (isRegisterMode) {
+          // Register
+          await auth.createUserWithEmailAndPassword(email, password);
+          const user = auth.currentUser;
+          await user.updateProfile({
+            displayName: email.split('@')[0]
+          });
+          // Save basic profile
+          await db.collection("users").doc(user.uid).set({
+            email: email,
+            created_at: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } else {
+          // Log In
+          await auth.signInWithEmailAndPassword(email, password);
+        }
+      } catch (err) {
+        alert("Authentication Error: " + err.message);
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.textContent = originalText;
+      }
+    });
+  }
+
+  // Handle Sign Out
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      if (confirm("Are you sure you want to log out?")) {
+        await auth.signOut();
+      }
+    });
+  }
+
+  // Header User Icon action (opens checkout modal to authentication/shipping step, or redirects to shop.html with action=login)
+  if (userProfileBtn) {
+    userProfileBtn.addEventListener("click", () => {
+      if (checkoutOverlay) {
+        openCheckoutStep(1);
+        checkoutOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+      } else {
+        window.location.href = "shop.html?action=login";
+      }
+    });
+  }
+
+  // Observe Firebase Auth state
+  if (typeof auth !== 'undefined') {
+    auth.onAuthStateChanged(async (user) => {
+      const authContainer = document.getElementById("checkout-auth-container");
+      const shippingContainer = document.getElementById("checkout-shipping-container");
+      const userIcon = document.getElementById("user-status-icon");
+
+      if (user) {
+        if (authContainer) authContainer.style.display = "none";
+        if (shippingContainer) shippingContainer.style.display = "block";
+
+        const chkEmail = document.getElementById("chk-email");
+        const chkName = document.getElementById("chk-name");
+        const chkAddress = document.getElementById("chk-address");
+
+        if (chkEmail) chkEmail.value = user.email;
+        if (chkName) chkName.value = user.displayName || "";
+
+        try {
+          const doc = await db.collection("users").doc(user.uid).get();
+          if (doc.exists) {
+            const data = doc.data();
+            if (data.name && chkName) chkName.value = data.name;
+            if (data.shipping_address && chkAddress) chkAddress.value = data.shipping_address;
+          }
+        } catch (e) {
+          console.warn("Could not retrieve user shipping details:", e);
+        }
+
+        if (userIcon) {
+          userIcon.className = "fa-solid fa-circle-user";
+          userIcon.style.color = "var(--accent-terracotta)";
+        }
+        if (userProfileBtn) {
+          userProfileBtn.title = `Account Profile (${user.email})`;
+        }
+      } else {
+        if (authContainer) authContainer.style.display = "block";
+        if (shippingContainer) shippingContainer.style.display = "none";
+
+        if (authSubmitBtn) {
+          authSubmitBtn.disabled = false;
+          authSubmitBtn.textContent = isRegisterMode ? "Register" : "Log In";
+        }
+        if (authForm) authForm.reset();
+
+        if (userIcon) {
+          userIcon.className = "fa-regular fa-user";
+          userIcon.style.color = "var(--text-primary)";
+        }
+        if (userProfileBtn) {
+          userProfileBtn.title = "Sign In / Account";
+        }
+      }
+    });
+  }
+
   // Open checkout
-  checkoutTrigger.addEventListener("click", () => {
-    if (cart.length === 0) {
-      alert("Your bag is empty! Add paintings or courses before checking out.");
-      return;
-    }
-    closeCartDrawer();
-    openCheckoutStep(1);
-    checkoutOverlay.classList.add("active");
-    document.body.style.overflow = "hidden";
-  });
+  if (checkoutTrigger && checkoutOverlay) {
+    checkoutTrigger.addEventListener("click", () => {
+      if (cart.length === 0) {
+        alert("Your bag is empty! Add paintings or courses before checking out.");
+        return;
+      }
+      closeCartDrawer();
+      openCheckoutStep(1);
+      checkoutOverlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+    });
+  }
 
   // Close checkout
-  checkoutClose.addEventListener("click", closeCheckoutModal);
-  checkoutOverlay.addEventListener("click", (e) => {
-    if (e.target === checkoutOverlay) closeCheckoutModal();
-  });
+  if (checkoutClose && checkoutOverlay) {
+    checkoutClose.addEventListener("click", closeCheckoutModal);
+    checkoutOverlay.addEventListener("click", (e) => {
+      if (e.target === checkoutOverlay) closeCheckoutModal();
+    });
+  }
 
   // Address step submission
-  addressForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    openCheckoutStep(2);
-  });
+  if (addressForm) {
+    addressForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  // Back button on payment step
-  prevBtn.addEventListener("click", () => {
-    openCheckoutStep(1);
-  });
-
-  // Payment form submission (complete purchase)
-  paymentForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    
-    const nameVal = document.getElementById("chk-name").value;
-    const emailVal = document.getElementById("chk-email").value;
-    const addressVal = document.getElementById("chk-address") ? document.getElementById("chk-address").value : "";
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const amountInPaise = Math.round(subtotal * 100);
-
-    const paySubmitBtn = paymentForm.querySelector('button[type="submit"]');
-    const originalText = paySubmitBtn.textContent;
-    paySubmitBtn.disabled = true;
-    paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
-
-    try {
-      // 1. Fetch public config (KEY_ID)
-      const configResponse = await fetch('/api/config');
-      if (!configResponse.ok) throw new Error('Failed to fetch payment configuration');
-      const configData = await configResponse.json();
-      const keyId = configData.key_id;
-
-      if (!keyId) throw new Error('Razorpay Key ID is not configured on the server.');
-
-      // 2. Create order on the backend
-      const orderResponse = await fetch('/api/create-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          amount: amountInPaise,
-          currency: 'INR',
-          receipt: `receipt_${Date.now()}`
-        })
-      });
-
-      if (!orderResponse.ok) {
-        const errData = await orderResponse.json();
-        throw new Error(errData.error || 'Failed to create order');
+      const user = auth ? auth.currentUser : null;
+      if (user) {
+        const nameVal = document.getElementById("chk-name").value;
+        const addressVal = document.getElementById("chk-address") ? document.getElementById("chk-address").value : "";
+        try {
+          await db.collection("users").doc(user.uid).set({
+            name: nameVal,
+            shipping_address: addressVal,
+            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        } catch (err) {
+          console.warn("Failed to update user profile document:", err);
+        }
       }
 
-      const orderData = await orderResponse.json();
-      const orderId = orderData.order_id;
+      openCheckoutStep(2);
+    });
+  }
 
-      // 3. Configure Razorpay Standard Options
-      const options = {
-        "key": keyId,
-        "amount": orderData.amount,
-        "currency": orderData.currency,
-        "name": "Samridhi Art Studio",
-        "description": "Art Store Purchase",
-        "image": "assets/artist_portrait.jpg",
-        "order_id": orderId,
-        "handler": async function (response) {
-          paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...`;
+  // Back button on payment step
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      openCheckoutStep(1);
+    });
+  }
 
-          try {
-            // 4. Verify payment signature on backend
-            const verifyResponse = await fetch('/api/verify-payment', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
+  // Payment form submission (complete purchase)
+  if (paymentForm) {
+    paymentForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const nameVal = document.getElementById("chk-name").value;
+      const emailVal = document.getElementById("chk-email").value;
+      const addressVal = document.getElementById("chk-address") ? document.getElementById("chk-address").value : "";
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const amountInPaise = Math.round(subtotal * 100);
+
+      const paySubmitBtn = paymentForm.querySelector('button[type="submit"]');
+      const originalText = paySubmitBtn.textContent;
+      paySubmitBtn.disabled = true;
+      paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
+
+      try {
+        if (typeof firebase === 'undefined' || typeof functions === 'undefined' || !auth.currentUser) {
+          throw new Error("User must be authenticated to check out via Firebase Cloud Functions.");
+        }
+
+        // 1. Create order on the backend via Firebase HTTPS Callable Function
+        const createRazorpayOrderFn = functions.httpsCallable('createRazorpayOrder');
+        const orderResponse = await createRazorpayOrderFn({ amount: amountInPaise });
+        
+        const orderData = orderResponse.data;
+        const orderId = orderData.order_id;
+
+        // 2. Configure Razorpay Options
+        const options = {
+          "key": "rzp_test_T59CvfIDapx588", // Public Razorpay test key
+          "amount": orderData.amount,
+          "currency": orderData.currency,
+          "name": "Samridhi Art Studio",
+          "description": "Art Store Purchase",
+          "image": "assets/artist_portrait.jpg",
+          "order_id": orderId,
+          "handler": async function (response) {
+            paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...`;
+
+            try {
+              // 3. Verify signature on backend via Firebase HTTPS Callable Function
+              const verifyRazorpayPaymentFn = functions.httpsCallable('verifyRazorpayPayment');
+              const verifyResult = await verifyRazorpayPaymentFn({
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature
-              })
-            });
+              });
 
-            if (!verifyResponse.ok) {
-              const verifyErr = await verifyResponse.json();
-              throw new Error(verifyErr.error || 'Payment verification failed');
-            }
+              if (verifyResult.data && verifyResult.data.verified) {
+                paySubmitBtn.disabled = false;
+                paySubmitBtn.textContent = originalText;
 
-            const verifyResult = await verifyResponse.json();
-            if (verifyResult.verified) {
+                // Mark originals sold
+                cart.forEach(item => {
+                  if (item.type === "original") {
+                    const paintObj = paintings.find(p => p.id === item.id);
+                    if (paintObj) paintObj.available = false;
+                  }
+                });
+                
+                // Reset cart
+                cart = [];
+                saveCart();
+                updateCartUI();
+                if (typeof renderGallery === "function") renderGallery();
+                if (typeof initSimulator === "function") initSimulator(); 
+
+                const successParagraph = document.querySelector(".success-screen p");
+                if (successParagraph) {
+                  successParagraph.innerHTML = `Your payment was successfully processed. Payment ID: <strong>${response.razorpay_payment_id}</strong>. A confirmation email has been dispatched.`;
+                }
+
+                openCheckoutStep(3);
+              } else {
+                throw new Error("Payment signature verification failed.");
+              }
+            } catch (verifyError) {
+              alert("Verification Error: " + verifyError.message);
               paySubmitBtn.disabled = false;
               paySubmitBtn.textContent = originalText;
-
-              // Update original painting availabilities locally to show sold status
-              cart.forEach(item => {
-                if (item.type === "original") {
-                  const paintObj = paintings.find(p => p.id === item.id);
-                  if (paintObj) paintObj.available = false;
-                }
-              });
-              
-              // Reset cart
-              cart = [];
-              saveCart();
-              updateCartUI();
-              if (typeof renderGallery === "function") renderGallery();
-              if (typeof initSimulator === "function") initSimulator(); // re-initialize simulator select dropdown labels
-
-              // Render real Payment ID in Step 3 success screen
-              const successParagraph = document.querySelector(".success-screen p");
-              if (successParagraph) {
-                successParagraph.innerHTML = `Your payment was successfully processed and verified. Razorpay Payment ID: <strong>${response.razorpay_payment_id}</strong>. A confirmation email with details has been sent to your email.`;
-              }
-
-              openCheckoutStep(3);
-            } else {
-              throw new Error('Payment verification returned unsuccessful status');
             }
-          } catch (verifyError) {
-            alert("Verification Error: " + verifyError.message);
-            paySubmitBtn.disabled = false;
-            paySubmitBtn.textContent = originalText;
-          }
-        },
-        "modal": {
-          "ondismiss": function() {
-            paySubmitBtn.disabled = false;
-            paySubmitBtn.textContent = originalText;
-          }
-        },
-        "prefill": {
-          "name": nameVal,
-          "email": emailVal
-        },
-        "notes": {
-          "address": addressVal
-        },
-        "theme": {
-          "color": "#D46A4F"
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', function (response){
-          alert("Payment failed: " + response.error.description);
-          paySubmitBtn.disabled = false;
-          paySubmitBtn.textContent = originalText;
-      });
-      rzp.open();
-
-    } catch (err) {
-      console.warn("Backend API not reachable. Falling back to client-only checkout mode for static hosting (GitHub Pages):", err.message);
-      
-      const options = {
-        "key": "rzp_test_T59CvfIDapx588", // Client-side fallback Key ID
-        "amount": amountInPaise,
-        "currency": "INR",
-        "name": "Samridhi Art Studio",
-        "description": "Art Store Purchase (GitHub Pages)",
-        "image": "assets/artist_portrait.jpg",
-        "handler": function (response) {
-          paySubmitBtn.disabled = false;
-          paySubmitBtn.textContent = originalText;
-
-          // Update original painting availabilities locally to show sold status
-          cart.forEach(item => {
-            if (item.type === "original") {
-              const paintObj = paintings.find(p => p.id === item.id);
-              if (paintObj) paintObj.available = false;
+          },
+          "modal": {
+            "ondismiss": function() {
+              paySubmitBtn.disabled = false;
+              paySubmitBtn.textContent = originalText;
             }
-          });
-          
-          // Reset cart
-          cart = [];
-          saveCart();
-          updateCartUI();
-          if (typeof renderGallery === "function") renderGallery();
-          if (typeof initSimulator === "function") initSimulator(); // re-initialize simulator select dropdown labels
-
-          // Render real Payment ID in Step 3 success screen
-          const successParagraph = document.querySelector(".success-screen p");
-          if (successParagraph) {
-            successParagraph.innerHTML = `Your payment was successfully processed. Razorpay Payment ID: <strong>${response.razorpay_payment_id}</strong>. (GitHub Pages static checkout simulation).`;
+          },
+          "prefill": {
+            "name": nameVal,
+            "email": emailVal
+          },
+          "notes": {
+            "address": addressVal
+          },
+          "theme": {
+            "color": "#D46A4F"
           }
+        };
 
-          openCheckoutStep(3);
-        },
-        "modal": {
-          "ondismiss": function() {
-            paySubmitBtn.disabled = false;
-            paySubmitBtn.textContent = originalText;
-          }
-        },
-        "prefill": {
-          "name": nameVal,
-          "email": emailVal
-        },
-        "notes": {
-          "address": addressVal
-        },
-        "theme": {
-          "color": "#D46A4F"
-        }
-      };
-
-      try {
         const rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response){
             alert("Payment failed: " + response.error.description);
@@ -939,23 +1039,99 @@ function initCheckout() {
             paySubmitBtn.textContent = originalText;
         });
         rzp.open();
-      } catch (fallbackErr) {
-        alert("Error initiating checkout: " + fallbackErr.message);
-        paySubmitBtn.disabled = false;
-        paySubmitBtn.textContent = originalText;
+
+      } catch (err) {
+        console.warn("Firebase Order failed or missing. Falling back to local/simulation mode:", err.message);
+        
+        // Fallback client-only mode
+        const options = {
+          "key": "rzp_test_T59CvfIDapx588",
+          "amount": amountInPaise,
+          "currency": "INR",
+          "name": "Samridhi Art Studio",
+          "description": "Art Store Purchase (Offline Simulation)",
+          "image": "assets/artist_portrait.jpg",
+          "handler": function (response) {
+            paySubmitBtn.disabled = false;
+            paySubmitBtn.textContent = originalText;
+
+            cart.forEach(item => {
+              if (item.type === "original") {
+                const paintObj = paintings.find(p => p.id === item.id);
+                if (paintObj) paintObj.available = false;
+              }
+            });
+            
+            cart = [];
+            saveCart();
+            updateCartUI();
+            if (typeof renderGallery === "function") renderGallery();
+            if (typeof initSimulator === "function") initSimulator();
+
+            const successParagraph = document.querySelector(".success-screen p");
+            if (successParagraph) {
+              successParagraph.innerHTML = `Your payment was successfully processed. Payment ID: <strong>${response.razorpay_payment_id}</strong>. (Simulation Mode).`;
+            }
+
+            openCheckoutStep(3);
+          },
+          "modal": {
+            "ondismiss": function() {
+              paySubmitBtn.disabled = false;
+              paySubmitBtn.textContent = originalText;
+            }
+          },
+          "prefill": {
+            "name": nameVal,
+            "email": emailVal
+          },
+          "notes": {
+            "address": addressVal
+          },
+          "theme": {
+            "color": "#D46A4F"
+          }
+        };
+
+        try {
+          const rzp = new Razorpay(options);
+          rzp.on('payment.failed', function (response){
+              alert("Payment failed: " + response.error.description);
+              paySubmitBtn.disabled = false;
+              paySubmitBtn.textContent = originalText;
+          });
+          rzp.open();
+        } catch (fallbackErr) {
+          alert("Error initiating checkout: " + fallbackErr.message);
+          paySubmitBtn.disabled = false;
+          paySubmitBtn.textContent = originalText;
+        }
       }
-    }
-  });
+    });
+  }
 
   // Finished checkout button
-  doneBtn.addEventListener("click", closeCheckoutModal);
+  if (doneBtn) {
+    doneBtn.addEventListener("click", closeCheckoutModal);
+  }
+
+  // Check URL query parameters for login redirection triggers
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('action') === 'login' && checkoutOverlay) {
+    setTimeout(() => {
+      openCheckoutStep(1);
+      checkoutOverlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }, 400);
+  }
 
   function openCheckoutStep(stepNumber) {
-    // Toggle active content divs
-    document.querySelectorAll(".checkout-step-content").forEach(el => el.classList.remove("active"));
-    document.getElementById(`step-content-${stepNumber}`).classList.add("active");
+    const stepContent = document.getElementById(`step-content-${stepNumber}`);
+    if (!stepContent) return;
 
-    // Toggle steps nodes styling
+    document.querySelectorAll(".checkout-step-content").forEach(el => el.classList.remove("active"));
+    stepContent.classList.add("active");
+
     document.querySelectorAll(".step-node").forEach(node => {
       const stepVal = parseInt(node.getAttribute("data-step"));
       node.classList.remove("active", "completed");
@@ -966,8 +1142,6 @@ function initCheckout() {
       }
     });
 
-    // Address elements adjustments:
-    // If cart contains only digital courses, hide Shipping Address inputs
     const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock");
     const shippingContainer = document.getElementById("shipping-address-container");
     const addressInput = document.getElementById("chk-address");
@@ -982,20 +1156,23 @@ function initCheckout() {
       }
     }
 
-    // Payment screen totals calculation
     if (stepNumber === 2) {
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const shipping = hasPhysical ? 0 : 0; // free shipping template
+      const shipping = hasPhysical ? 0 : 0; 
       const total = subtotal + shipping;
 
-      document.getElementById("summary-subtotal").textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      document.getElementById("summary-total").textContent = `₹${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      const subtotalEl = document.getElementById("summary-subtotal");
+      const totalEl = document.getElementById("summary-total");
+      if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      if (totalEl) totalEl.textContent = `₹${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     }
   }
 
   function closeCheckoutModal() {
-    checkoutOverlay.classList.remove("active");
-    document.body.style.overflow = "auto";
+    if (checkoutOverlay) {
+      checkoutOverlay.classList.remove("active");
+      document.body.style.overflow = "auto";
+    }
   }
 }
 
