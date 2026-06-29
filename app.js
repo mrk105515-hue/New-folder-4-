@@ -26,96 +26,64 @@ if (typeof firebase !== 'undefined') {
 const paintings = [
   {
     id: 1,
-    title: "Sunset Solitude",
-    medium: "Oil on Canvas",
-    priceOriginal: 12000,
-    widthInches: 30,
-    heightInches: 24,
-    image: "assets/paintings/sunset_solitude.png",
+    title: "Folk Art Peacock",
+    medium: "Watercolor on Paper",
+    priceOriginal: 8500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
     featured: true,
-    category: "oil",
+    category: "watercolor",
     available: true,
-    description: "A premium impasto landscape painting capturing a warm golden sunset over a peaceful alpine lake. Made with thick layers of textured oil paint and subtle metallic gold leaf highlights that catch the light beautifully from different angles."
+    description: "A vibrant hand-painted depiction of a ceremonial peacock with intricate traditional detailing and patterns."
   },
   {
     id: 2,
-    title: "Ocean Whisper",
-    medium: "Acrylic & Gold Leaf",
-    priceOriginal: 9500,
-    widthInches: 40,
-    heightInches: 30,
-    image: "assets/paintings/ocean_whisper.png",
+    title: "Decorative Floral Vase",
+    medium: "Watercolor on Paper",
+    priceOriginal: 7500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM (1).jpeg",
     featured: false,
-    category: "acrylic",
+    category: "watercolor",
     available: true,
-    description: "A dramatic abstract representation of deep ocean waves, balancing deep sea blue, indigo, and emerald hues with dynamic, hand-applied gold leaf textures that shimmer as you move around it."
+    description: "A beautiful hand-painted composition of blooming flowers inside an ornate, traditionally decorated vase."
   },
   {
     id: 3,
-    title: "Silent Forest",
-    medium: "Oil on Panel",
-    priceOriginal: 8500,
-    widthInches: 24,
-    heightInches: 20,
-    image: "assets/paintings/silent_forest.png",
+    title: "Royal Elephant Portrait",
+    medium: "Watercolor on Paper",
+    priceOriginal: 9500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM (1).jpeg",
     featured: false,
-    category: "oil",
+    category: "watercolor",
     available: true,
-    description: "A quiet, moody study of a deep pine forest enveloped in thick morning fog. Light rays filter gently through the trees. This piece creates a calming, atmospheric focal point suitable for a bedroom, study, or living space."
+    description: "A detailed hand-painted illustration of a decorated royal elephant, showcasing traditional Indian folk patterns."
   },
   {
     id: 4,
-    title: "Golden Bloom",
-    medium: "Mixed Media & Gold Leaf",
-    priceOriginal: 14000,
-    widthInches: 36,
-    heightInches: 36,
-    image: "assets/paintings/golden_bloom.png",
+    title: "Golden Flora Study",
+    medium: "Folk Art Watercolor",
+    priceOriginal: 6500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
     featured: false,
-    category: "mixed",
-    available: false, // Sold Out Original
-    description: "Delicate textured wildflowers blooming against a rich dark charcoal backdrop. Samridhi combines high-quality oil pigments with luxurious gold leaf details to create depth and botanical texture."
+    category: "watercolor",
+    available: true,
+    description: "An intricate traditional floral study featuring rich earth tones, organic details, and fine lining."
   }
 ];
 
 const courses = [
   {
-    id: "c1",
-    title: "Impasto Oil Painting Masterclass",
-    duration: "8 Weeks",
-    level: "Intermediate",
-    lessons: 24,
-    price: 2999,
-    image: "assets/courses/oil_painting.png",
-    students: 1420,
-    rating: "4.9",
-    description: "Learn how to build dramatic, high-texture landscapes using palette knives, thick oil paint layers, and expressive blending techniques.",
-    inclusions: [
-      "24 High-Definition Video Lessons",
-      "Direct 1-on-1 Portfolio Feedback from Samridhi",
-      "Access to Private Artist Community",
-      "Lifetime Course Access & Updates",
-      "Downloadable Materials Checklist & Textures Guide"
-    ]
-  },
-  {
     id: "c2",
     title: "Watercolor Light & Atmosphere",
-    duration: "6 Weeks",
-    level: "Beginner Friendly",
-    lessons: 18,
-    price: 1999,
     image: "assets/courses/watercolor.png",
-    students: 980,
-    rating: "4.8",
-    description: "Master wet-on-wet techniques, water ratio control, and soft color transitions to paint glowing skies, oceans, and forest mist.",
-    inclusions: [
-      "18 High-Definition Video Lessons",
-      "Step-by-step Guided Projects",
-      "Color Theory & Studio Palette Guides",
-      "Monthly Live Q&A and Paint-Along Sessions",
-      "Official Academy Certificate of Completion"
-    ]
+    upcoming: true
   }
 ];
 
@@ -248,35 +216,56 @@ function renderCourses() {
   const container = document.getElementById("courses-grid-container");
   if (!container) return;
   
-  container.innerHTML = courses.map(course => `
-    <div class="course-card">
-      <div class="course-img-container">
-        <img src="${course.image}" alt="${course.title}">
-        <span class="course-badge" style="background: var(--accent-terracotta); color: white;">Upcoming</span>
-      </div>
-      <div class="course-content">
-        <span class="course-duration">
-          <i class="fa-solid fa-clock"></i> ${course.duration} • ${course.lessons} lessons
-        </span>
-        <h3 class="course-title">${course.title}</h3>
-        <p class="course-description">${course.description}</p>
-        
-        <div class="course-stats">
-          <div class="stat-item"><i class="fa-solid fa-user-group"></i> ${course.students}+ students</div>
-          <div class="stat-item"><i class="fa-solid fa-star"></i> ${course.rating} Rating</div>
-        </div>
-        
-        <div class="course-footer">
-          <div class="course-price">
-            <span class="price-label">Tuition Fee</span>
-            <span class="price-val">₹${course.price}</span>
+  container.innerHTML = courses.map(course => {
+    if (course.upcoming) {
+      return `
+        <div class="course-card">
+          <div class="course-img-container">
+            <img src="${course.image}" alt="${course.title}">
+            <span class="course-badge" style="background: var(--accent-terracotta); color: white;">Upcoming</span>
           </div>
-          <button class="btn btn-secondary course-details-btn" data-id="${course.id}">Syllabus</button>
-          <button class="btn btn-terracotta course-enroll-btn" data-id="${course.id}" disabled style="opacity: 0.6; cursor: not-allowed;">Upcoming</button>
+          <div class="course-content" style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;">
+            <div>
+              <h3 class="course-title" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">${course.title}</h3>
+              <p class="course-description" style="font-style: italic; color: var(--text-secondary); margin-bottom: 2rem;">More details about this course syllabus, materials, and enrollment options will be announced soon.</p>
+            </div>
+            <div class="course-footer" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+              <button class="btn btn-terracotta" style="width: 100%; opacity: 0.8; cursor: not-allowed;" disabled>Upcoming</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <div class="course-card">
+        <div class="course-img-container">
+          <img src="${course.image}" alt="${course.title}">
+          <span class="course-badge" style="background: var(--accent-terracotta); color: white;">Upcoming</span>
+        </div>
+        <div class="course-content">
+          <span class="course-duration">
+            <i class="fa-solid fa-clock"></i> ${course.duration} • ${course.lessons} lessons
+          </span>
+          <h3 class="course-title">${course.title}</h3>
+          <p class="course-description">${course.description}</p>
+          
+          <div class="course-stats">
+            <div class="stat-item"><i class="fa-solid fa-user-group"></i> ${course.students}+ students</div>
+            <div class="stat-item"><i class="fa-solid fa-star"></i> ${course.rating} Rating</div>
+          </div>
+          
+          <div class="course-footer">
+            <div class="course-price">
+              <span class="price-label">Tuition Fee</span>
+              <span class="price-val">₹${course.price}</span>
+            </div>
+            <button class="btn btn-secondary course-details-btn" data-id="${course.id}">Syllabus</button>
+            <button class="btn btn-terracotta course-enroll-btn" data-id="${course.id}" disabled style="opacity: 0.6; cursor: not-allowed;">Upcoming</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 
   container.querySelectorAll(".course-details-btn").forEach(btn => {
     btn.addEventListener("click", () => {

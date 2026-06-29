@@ -422,7 +422,7 @@ function initCategoryCalculator() {
 
     thumbnailsContainer.innerHTML = paintingsList.map((art, index) => `
       <div class="bulk-swatch ${index === startIndex ? 'active' : ''}" data-id="${art.id}" title="${art.title}">
-        <img src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/sunset_solitude.png';">
+        <img src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
       </div>
     `).join("");
 
@@ -678,7 +678,7 @@ function updateCartUI() {
     return `
       <div class="cart-item">
         <div class="cart-item-img">
-          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/paintings/sunset_solitude.png';">
+          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
         </div>
         <div class="cart-item-info">
           <h4>${item.title}</h4>

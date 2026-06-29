@@ -26,55 +26,55 @@ if (typeof firebase !== 'undefined') {
 const paintings = [
   {
     id: 1,
-    title: "Sunset Solitude",
-    medium: "Oil on Canvas",
-    priceOriginal: 12000,
-    widthInches: 30,
-    heightInches: 24,
-    image: "assets/paintings/sunset_solitude.png",
+    title: "Folk Art Peacock",
+    medium: "Watercolor on Paper",
+    priceOriginal: 8500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
     featured: true,
-    category: "oil",
+    category: "watercolor",
     available: true,
-    description: "A premium impasto landscape painting capturing a warm golden sunset over a peaceful alpine lake. Made with thick layers of textured oil paint and subtle metallic gold leaf highlights."
+    description: "A vibrant hand-painted depiction of a ceremonial peacock with intricate traditional detailing and patterns."
   },
   {
     id: 2,
-    title: "Ocean Whisper",
-    medium: "Acrylic & Gold Leaf",
-    priceOriginal: 9500,
-    widthInches: 40,
-    heightInches: 30,
-    image: "assets/paintings/ocean_whisper.png",
+    title: "Decorative Floral Vase",
+    medium: "Watercolor on Paper",
+    priceOriginal: 7500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM (1).jpeg",
     featured: false,
-    category: "acrylic",
+    category: "watercolor",
     available: true,
-    description: "A dramatic abstract representation of deep ocean waves, balancing deep sea blue, indigo, and emerald hues with dynamic, hand-applied gold leaf textures."
+    description: "A beautiful hand-painted composition of blooming flowers inside an ornate, traditionally decorated vase."
   },
   {
     id: 3,
-    title: "Silent Forest",
-    medium: "Oil on Panel",
-    priceOriginal: 8500,
-    widthInches: 24,
-    heightInches: 20,
-    image: "assets/paintings/silent_forest.png",
+    title: "Royal Elephant Portrait",
+    medium: "Watercolor on Paper",
+    priceOriginal: 9500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM (1).jpeg",
     featured: false,
-    category: "oil",
+    category: "watercolor",
     available: true,
-    description: "A quiet, moody study of a deep pine forest enveloped in thick morning fog. Light rays filter gently through the trees."
+    description: "A detailed hand-painted illustration of a decorated royal elephant, showcasing traditional Indian folk patterns."
   },
   {
     id: 4,
-    title: "Golden Bloom",
-    medium: "Mixed Media & Gold Leaf",
-    priceOriginal: 14000,
-    widthInches: 36,
-    heightInches: 36,
-    image: "assets/paintings/golden_bloom.png",
+    title: "Golden Flora Study",
+    medium: "Folk Art Watercolor",
+    priceOriginal: 6500,
+    widthInches: 12,
+    heightInches: 16,
+    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
     featured: false,
-    category: "mixed",
-    available: false,
-    description: "Delicate textured wildflowers blooming against a rich dark charcoal backdrop. Samridhi combines high-quality oil pigments with gold leaf details."
+    category: "watercolor",
+    available: true,
+    description: "An intricate traditional floral study featuring rich earth tones, organic details, and fine lining."
   }
 ];
 
@@ -409,7 +409,7 @@ function renderGallery() {
     }
   ].map(cat => {
     const pList = bulkPaintings[cat.categoryKey] || [];
-    const firstImage = pList.length > 0 ? pList[0].image : "assets/paintings/sunset_solitude.png";
+    const firstImage = pList.length > 0 ? pList[0].image : "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg";
     return {
       ...cat,
       id: `cat_${cat.categoryKey}`,
@@ -464,7 +464,7 @@ function renderGallery() {
       const pList = bulkPaintings[art.categoryKey] || [];
       const swatchesHTML = pList.map((p, idx) => `
         <span class="shop-bulk-swatch ${idx === 0 ? 'active' : ''}" data-variant-id="${p.id}" data-image="${p.image}" data-title="${p.title}" style="width: 32px; height: 32px; border-radius: 4px; border: 1.5px solid var(--glass-border); overflow: hidden; cursor: pointer; display: inline-block; transition: all 0.2s ease; margin-right: 0.2rem;">
-          <img src="${p.image}" alt="${p.title}" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='assets/paintings/sunset_solitude.png';">
+          <img src="${p.image}" alt="${p.title}" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
         </span>
       `).join("");
       
@@ -474,7 +474,7 @@ function renderGallery() {
       return `
         <div class="artwork-card bulk-artwork-card" data-category="${art.categoryKey}" data-variant="${defaultVariantId}">
           <div class="artwork-img-container">
-            <img class="bulk-main-image" src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/sunset_solitude.png';" style="width: 100%; height: 100%; object-fit: contain;">
+            <img class="bulk-main-image" src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';" style="width: 100%; height: 100%; object-fit: contain;">
             <div class="artwork-badges">
               <span class="badge badge-bulk-tag">Bulk Order</span>
               <span class="badge badge-print">₹200 / piece</span>
@@ -515,7 +515,7 @@ function renderGallery() {
       return `
         <div class="artwork-card">
           <div class="artwork-img-container">
-            <img src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/sunset_solitude.png';">
+            <img src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
             <div class="artwork-badges">
               ${badgeHTML}
             </div>
