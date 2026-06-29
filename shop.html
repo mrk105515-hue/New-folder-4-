@@ -415,12 +415,16 @@
       <!-- Generated Dynamically by JS -->
     </div>
     <div class="cart-footer">
+      <div class="cart-total-row" id="cart-original-subtotal-container" style="display: none; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center;">
+        <span>Subtotal</span>
+        <span id="cart-original-subtotal-val">₹0.00</span>
+      </div>
       <div class="cart-total-row cart-savings-row" id="cart-savings-container" style="display: none; color: var(--success); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
-        <span>Total Savings</span>
+        <span>Bulk Discount</span>
         <span id="cart-savings-val">-₹0.00</span>
       </div>
       <div class="cart-total-row">
-        <span>Subtotal</span>
+        <span id="cart-total-label">Subtotal</span>
         <span class="cart-total-price" id="cart-subtotal">₹0.00</span>
       </div>
       <button class="btn btn-terracotta cart-checkout-btn" id="checkout-trigger">Proceed to Checkout</button>
@@ -572,6 +576,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
   <!-- Razorpay Standard Checkout SDK -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- Paintings Database -->
+  <script src="paintings-data.js"></script>
   <!-- Shop page logic -->
   <script src="shop.js"></script>
 </body>

@@ -67,13 +67,17 @@
       </div>
       <div class="hero-artwork-showcase">
         <div class="hero-frame-container">
-          <img src="assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg" alt="Folk Art Peacock featured painting" id="hero-featured-img">
+          <a href="painting-details.html?id=1&type=original">
+            <img src="assets/paintings/WhatsApp Image 2026-06-29 at 8.45.56 PM.jpeg" alt="Radha Rani featured painting" id="hero-featured-img">
+          </a>
           <div class="hero-artwork-caption">
             <div>
-              <h4>Folk Art Peacock</h4>
-              <p>Watercolor on Paper, 12" x 16"</p>
+              <a href="painting-details.html?id=1&type=original" style="text-decoration: none; color: inherit;">
+                <h4>Radha Rani</h4>
+              </a>
+              <p>Acrylic on Canvas, A4 Size</p>
             </div>
-            <button class="circle-btn hero-buy-btn" data-id="1" aria-label="Quick buy Folk Art Peacock">
+            <button class="circle-btn hero-buy-btn" data-id="1" aria-label="Quick buy Radha Rani">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
@@ -96,9 +100,9 @@
           
           <!-- Dynamic Floating Artwork Frame -->
           <div class="room-wall-artwork-frame" id="simulator-art-frame">
-            <div class="room-wall-artwork" id="simulator-artwork-img" style="background-image: url('assets/paintings/bulk/WhatsApp%20Image%202026-06-27%20at%209.50.24%20PM%20(1).jpeg');"></div>
+            <div class="room-wall-artwork" id="simulator-artwork-img" style="background-image: url('assets/paintings/WhatsApp%20Image%202026-06-29%20at%208.45.56%20PM.jpeg');"></div>
             <!-- Dynamic Dimension Info overlay -->
-            <div class="artwork-dimension-tag" id="simulator-dimension-tag">12" x 16" (Original)</div>
+            <div class="artwork-dimension-tag" id="simulator-dimension-tag">A4 Size (Original)</div>
           </div>
         </div>
       </div>
@@ -263,12 +267,16 @@
       <!-- Generated Dynamically by JS -->
     </div>
     <div class="cart-footer">
+      <div class="cart-total-row" id="cart-original-subtotal-container" style="display: none; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center;">
+        <span>Subtotal</span>
+        <span id="cart-original-subtotal-val">₹0.00</span>
+      </div>
       <div class="cart-total-row cart-savings-row" id="cart-savings-container" style="display: none; color: var(--success); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
-        <span>Total Savings</span>
+        <span>Bulk Discount</span>
         <span id="cart-savings-val">-₹0.00</span>
       </div>
       <div class="cart-total-row">
-        <span>Subtotal</span>
+        <span id="cart-total-label">Subtotal</span>
         <span class="cart-total-price" id="cart-subtotal">₹0.00</span>
       </div>
       <button class="btn btn-terracotta cart-checkout-btn" id="checkout-trigger">Proceed to Checkout</button>
@@ -451,6 +459,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
   <!-- Razorpay Standard Checkout SDK -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- Paintings Database -->
+  <script src="paintings-data.js"></script>
   <!-- Custom App JS -->
   <script src="app.js"></script>
 </body>

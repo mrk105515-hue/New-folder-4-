@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="View bulk art stock and order custom paintings. Catalog by style category.">
-  <title>Bulk Art Collection | Samridhi Art Studio</title>
+  <meta name="description" content="View painting details, specifications, and preview the artwork on a virtual living room wall before buying.">
+  <title>Artwork Details | Samridhi Art Studio</title>
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,14 +12,166 @@
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
   
+  <style>
+    .details-page-container {
+      padding: calc(7rem + 35px) 5% 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      margin-bottom: 5rem;
+      align-items: start;
+    }
+    
+    .details-image-panel {
+      position: sticky;
+      top: 100px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .details-frame-container {
+      border: 15px solid #1a1a1a;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      background: #fdfdfd;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      max-width: 100%;
+    }
+    
+    .details-frame-container img {
+      max-width: 100%;
+      max-height: 500px;
+      object-fit: contain;
+      border-radius: 2px;
+    }
 
+    .details-info-panel h1 {
+      font-size: 2.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0.5rem 0 1rem;
+      line-height: 1.2;
+    }
+
+    .details-price {
+      font-size: 2rem;
+      color: var(--accent-terracotta);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .details-price .unit-label {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .details-meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .details-meta-table tr {
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .details-meta-table td {
+      padding: 0.75rem 0;
+      font-size: 0.95rem;
+    }
+
+    .details-meta-table td:first-child {
+      color: var(--text-secondary);
+      font-weight: 500;
+      width: 35%;
+    }
+
+    .details-meta-table td:last-child {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .badge-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-status.in-stock {
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--success);
+    }
+
+    .badge-status.sold-out {
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--accent-terracotta);
+    }
+
+    .security-bullet {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 1rem;
+    }
+
+    .security-bullet i {
+      color: var(--accent-gold);
+      font-size: 1rem;
+    }
+
+    /* Virtual Wall Simulator Section inside Details */
+    .detail-simulator-section {
+      border-top: 1px solid var(--glass-border);
+      padding: 5rem 0;
+    }
+
+    .detail-simulator-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .detail-simulator-header h2 {
+      font-size: 2.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    @media (max-width: 992px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .details-image-panel {
+        position: relative;
+        top: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-
-  <!-- Top Promo Banner -->
-  <div class="top-promo-banner">
-    <i class="fa-solid fa-tags"></i> Bulk Order Special: Add any 5 or more paintings to your cart to unlock flat tiered discounts (Save up to 50%!)
-  </div>
 
   <!-- Sticky Glassmorphic Header -->
   <header id="app-header" class="scrolled">
@@ -50,131 +202,113 @@
     </div>
   </header>
 
-  <!-- Category Hero Section -->
-  <section class="category-hero">
-    <div class="breadcrumb-row">
-      <a href="index.html">Home</a>
-      <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i>
-      <a href="shop.html">Shop & Bulk</a>
-      <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i>
-      <span id="category-breadcrumb">Collection</span>
-    </div>
+  <!-- Main Details Page -->
+  <main class="details-page-container">
     
-    <div class="category-intro">
-      <div class="category-intro-left">
-        <h1 id="category-title">Bulk Category Collection</h1>
-        <p id="category-description">Loading category details...</p>
-      </div>
-      <div class="category-intro-right">
-        <a href="shop.html" class="btn btn-secondary btn-sm">
-          <i class="fa-solid fa-arrow-left"></i> Back to Gallery
-        </a>
-      </div>
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb-row" style="margin-bottom: 2rem;">
+      <a href="index.html">Home</a>
+      <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin: 0 0.5rem; color: var(--text-muted);"></i>
+      <a href="shop.html" id="breadcrumb-parent">Gallery</a>
+      <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; margin: 0 0.5rem; color: var(--text-muted);"></i>
+      <span id="breadcrumb-title" style="color: var(--text-primary); font-weight: 500;">Artwork Details</span>
     </div>
-  </section>
 
-  <!-- Paintings Gallery / Merchandise details Section -->
-  <main class="gallery-container">
-    <div class="bulk-calculator-wrapper">
-      <div class="bulk-calc-grid">
+    <!-- Product Grid -->
+    <div class="details-grid">
+      
+      <!-- Left Column: Frame -->
+      <div class="details-image-panel">
+        <div class="details-frame-container">
+          <img src="" alt="Artwork Frame" id="details-img">
+        </div>
+      </div>
+
+      <!-- Right Column: Info -->
+      <div class="details-info-panel">
+        <span class="badge-status in-stock" id="details-status-badge">Available</span>
+        <h1 id="details-title">Artwork Title</h1>
         
-        <!-- Left Column: Large Rounded Preview Frame -->
-        <div class="bulk-preview-column">
-          <div class="bulk-preview-frame">
-            <img id="bulk-preview-img" src="" alt="Selected Variation Preview" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
-          </div>
+        <div class="details-price">
+          <span id="details-price-val">₹0</span>
+          <span class="unit-label" id="details-unit-label" style="display: none;">/ print</span>
         </div>
 
-        <!-- Right Column: Premium Product Details & Controls -->
-        <div class="bulk-details-column">
-          <div class="bulk-detail-header">
-            <span class="bulk-detail-category" id="bulk-category-tag">Collection Category</span>
-            <h2 class="bulk-detail-title" id="bulk-preview-title">Painting Title</h2>
-            
-            <div class="bulk-price-status-row">
-              <div class="bulk-price-container">
-                <span class="bulk-price-value" id="bulk-base-price-display">₹200</span>
-                <span class="bulk-price-label">per piece</span>
-              </div>
-              <span class="badge-stock-status">
-                <i class="fa-solid fa-circle-check"></i> IN STOCK & READY TO SHIP
-              </span>
-            </div>
+        <p class="text-secondary" id="details-desc" style="line-height: 1.6; font-size: 1.05rem; margin-bottom: 2rem;">
+          Artwork description loader...
+        </p>
 
-            <!-- Sleek Bulk Discounts Tiers Cards -->
-            <div class="bulk-tiers-grid" style="display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap;">
-              <div class="tier-card" id="tier-card-1" style="flex: 1; min-width: 100px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; transition: all 0.3s ease;">
-                <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 600;">1–4 Items</span>
-                <strong style="font-size: 1.1rem; color: var(--text-primary); display: block; margin-top: 0.2rem;">0% OFF</strong>
-              </div>
-              <div class="tier-card" id="tier-card-2" style="flex: 1; min-width: 100px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; position: relative; transition: all 0.3s ease;">
-                <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 600;">5–9 Items</span>
-                <strong style="font-size: 1.1rem; color: var(--text-primary); display: block; margin-top: 0.2rem;">25% OFF</strong>
-              </div>
-              <div class="tier-card" id="tier-card-3" style="flex: 1; min-width: 100px; background: var(--bg-secondary); border: 1px solid var(--glass-border); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; position: relative; transition: all 0.3s ease;">
-                <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 600;">10+ Items</span>
-                <strong style="font-size: 1.1rem; color: var(--text-primary); display: block; margin-top: 0.2rem;">50% OFF</strong>
-              </div>
-            </div>
-          </div>
+        <!-- Specifications Table -->
+        <table class="details-meta-table">
+          <tr>
+            <td>Medium / Category</td>
+            <td id="details-meta-medium">Acrylic on Canvas</td>
+          </tr>
+          <tr>
+            <td>Dimensions</td>
+            <td id="details-meta-dimensions">12" x 16"</td>
+          </tr>
+          <tr>
+            <td>Artwork Type</td>
+            <td id="details-meta-type">Original Canvas Painting</td>
+          </tr>
+        </table>
 
-          <div class="bulk-detail-body">
-            <p class="bulk-detail-desc" id="bulk-preview-desc">Painting description...</p>
-            <a id="view-bulk-details-link" href="#" style="color: var(--accent-gold); text-decoration: none; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; transition: var(--transition-smooth);">
-              <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem;"></i> View Details & Wall Preview
-            </a>
-            
-            <hr class="bulk-divider">
+        <!-- Actions -->
+        <button class="btn btn-primary" id="details-add-to-bag-btn" style="width: 100%; padding: 1.2rem; font-size: 1.1rem; margin-bottom: 2rem;">
+          Add Original Canvas to Bag
+        </button>
 
-            <form id="bulk-calc-input-form" onsubmit="event.preventDefault();" class="bulk-merch-form">
-              
-              <!-- Variations selector showing small square painting images acting as swatches -->
-              <div class="form-group">
-                <label class="bulk-control-label">SELECT PAINTING VARIATION</label>
-                <div class="bulk-thumbnails-picker" id="bulk-thumbnails-container">
-                  <!-- Generated Dynamically by JS -->
-                </div>
-              </div>
-
-              <!-- Quantity and Breakdowns Row -->
-              <div class="bulk-order-inputs-breakdown">
-                <div class="form-group qty-group">
-                  <label for="bulk-qty" class="bulk-control-label">ORDER QUANTITY</label>
-                  <div class="bulk-qty-selector">
-                    <button type="button" class="bulk-qty-btn" id="bulk-qty-dec"><i class="fa-solid fa-minus"></i></button>
-                    <input type="number" id="bulk-qty" value="1" min="1" required>
-                    <button type="button" class="bulk-qty-btn" id="bulk-qty-inc"><i class="fa-solid fa-plus"></i></button>
-                  </div>
-                </div>
-
-                <div class="bulk-price-breakdown">
-                  <div class="breakdown-row">
-                    <span>Price per painting</span>
-                    <strong id="calc-price-unit">₹200</strong>
-                  </div>
-                  <div class="breakdown-row savings">
-                    <span>Bulk Savings</span>
-                    <strong id="calc-savings">₹0</strong>
-                  </div>
-                  <div class="breakdown-row total">
-                    <span>Estimated Total</span>
-                    <strong id="calc-total-cost">₹0</strong>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Actions Buttons -->
-              <div class="bulk-actions-wrapper" style="grid-template-columns: 1fr;">
-                <button type="button" class="btn btn-primary btn-lg" id="bulk-add-to-cart-btn" style="width: 100%;">
-                  <i class="fa-solid fa-bag-shopping"></i> Add Selected to Bag
-                </button>
-              </div>
-            </form>
-          </div>
+        <div class="security-bullet">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>Free shipping pan-India. Shipped securely in high-quality crates.</span>
         </div>
-
+        <div class="security-bullet">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Secure transaction checkout powered by Razorpay.</span>
+        </div>
+        <div class="security-bullet">
+          <i class="fa-solid fa-certificate"></i>
+          <span>Includes a physical certificate of authenticity hand-signed by Samridhi.</span>
+        </div>
       </div>
+
     </div>
+
+    <!-- Interactive Wall Simulator Component -->
+    <section class="detail-simulator-section">
+      <div class="detail-simulator-header">
+        <h2>Virtual Wall Simulator</h2>
+        <p class="text-secondary">Visualize how this artwork looks hung inside a living space to match your room aesthetics.</p>
+      </div>
+
+      <!-- Virtual Wall Simulator Component (from index.html) -->
+      <div class="simulator-card-wrapper" style="max-width: 950px; margin: 0 auto; background: var(--bg-primary); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; box-shadow: var(--card-shadow);">
+        <div class="room-preview-container" id="simulator-canvas-area" style="position: relative; width: 100%; height: 480px; background-image: url('assets/living_room_bg_1779763650242.png'); background-size: cover; background-position: center; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: background-image 0.5s ease;">
+          <div class="room-wall-artwork-frame" id="simulator-art-frame" style="position: absolute; transform: scale(1.0); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 8px solid #1a1a1a; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-radius: 2px;">
+            <div class="room-wall-artwork" id="simulator-artwork-img" style="width: 150px; height: 200px; background-size: cover; background-position: center; transition: all 0.3s ease;"></div>
+            <div class="artwork-dimension-tag" id="simulator-dimension-tag" style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); background: rgba(26,26,26,0.85); color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 3px; white-space: nowrap; font-weight: 500;">Dimensions</div>
+          </div>
+        </div>
+
+        <div class="simulator-controls" style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; flex-wrap: wrap; gap: 1.5rem;">
+          <div class="control-group" style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-secondary btn-sm room-btn active" data-bg="assets/living_room_bg_1779763650242.png">Living Room</button>
+            <button class="btn btn-secondary btn-sm room-btn" data-bg="assets/bedroom_bg_dummy.png" onerror="this.style.display='none';">Bedroom</button>
+            <button class="btn btn-secondary btn-sm room-btn" data-bg="assets/office_bg_dummy.png" onerror="this.style.display='none';">Office</button>
+          </div>
+          <div class="control-group" style="display: flex; align-items: center; gap: 1rem;">
+            <span class="text-secondary" style="font-size: 0.9rem; font-weight: 500;">Scale Size:</span>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-secondary btn-sm size-btn active" data-scale="1.0">Actual Size</button>
+              <button class="btn btn-secondary btn-sm size-btn" data-scale="1.3">1.3x Larger</button>
+              <button class="btn btn-secondary btn-sm size-btn" data-scale="1.6">1.6x Gallery Size</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Footer -->
@@ -246,31 +380,6 @@
     </div>
   </div>
 
-  <!-- Painting Details Modal -->
-  <div class="modal-overlay" id="painting-modal-overlay">
-    <div class="modal-container">
-      <button class="modal-close-btn" id="painting-modal-close" aria-label="Close modal">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div class="detail-modal-grid">
-        <div class="detail-modal-image">
-          <img src="" alt="" id="modal-art-img" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
-        </div>
-        <div class="detail-modal-info">
-          <h3 id="modal-art-title">Painting Title</h3>
-          <div class="detail-modal-meta" id="modal-art-meta">Medium • Size</div>
-          <p class="detail-modal-desc" id="modal-art-desc">Painting description...</p>
-          
-          <div class="detail-modal-actions" style="margin-top: 2rem;">
-            <button class="btn btn-primary" id="modal-art-buy-btn" style="width: 100%;">Add to Bag</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
   <!-- Checkout Multi-Step Modal -->
   <div class="modal-overlay" id="checkout-modal-overlay">
     <div class="modal-container checkout-modal-container">
@@ -321,8 +430,8 @@
               <input type="email" id="chk-email" required placeholder="Samridhi@example.com" readonly style="opacity: 0.7; background: #e9ecef;">
             </div>
             <div class="form-group" id="shipping-address-container">
-              <label for="chk-address">Shipping Address (For physical paintings)</label>
-              <input type="text" id="chk-address" placeholder="123 Gallery Lane, Portland, OR 97201">
+              <label for="chk-address">Shipping Address</label>
+              <input type="text" id="chk-address" required placeholder="123 Gallery Lane, Portland, OR 97201">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Continue to Payment</button>
           </form>
@@ -371,10 +480,9 @@
           <p>
             Your payment was successfully processed. A confirmation email with order details has been sent to your email.
           </p>
-          <button class="btn btn-primary" id="checkout-done-btn">Back to Category</button>
+          <button class="btn btn-primary" id="checkout-done-btn">Back to Shop</button>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -387,7 +495,7 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <!-- Paintings Database -->
   <script src="paintings-data.js"></script>
-  <!-- Page logic -->
-  <script src="bulk-gallery.js"></script>
+  <!-- Details page logic -->
+  <script src="painting-details.js"></script>
 </body>
 </html>

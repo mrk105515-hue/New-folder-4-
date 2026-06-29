@@ -23,253 +23,13 @@ if (typeof firebase !== 'undefined') {
 }
 
 // Shop & Bulk Order Data
-const paintings = [
-  {
-    id: 1,
-    title: "Folk Art Peacock",
-    medium: "Watercolor on Paper",
-    priceOriginal: 8500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
-    featured: true,
-    category: "watercolor",
-    available: true,
-    description: "A vibrant hand-painted depiction of a ceremonial peacock with intricate traditional detailing and patterns."
-  },
-  {
-    id: 2,
-    title: "Decorative Floral Vase",
-    medium: "Watercolor on Paper",
-    priceOriginal: 7500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM (1).jpeg",
-    featured: false,
-    category: "watercolor",
-    available: true,
-    description: "A beautiful hand-painted composition of blooming flowers inside an ornate, traditionally decorated vase."
-  },
-  {
-    id: 3,
-    title: "Royal Elephant Portrait",
-    medium: "Watercolor on Paper",
-    priceOriginal: 9500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM (1).jpeg",
-    featured: false,
-    category: "watercolor",
-    available: true,
-    description: "A detailed hand-painted illustration of a decorated royal elephant, showcasing traditional Indian folk patterns."
-  },
-  {
-    id: 4,
-    title: "Golden Flora Study",
-    medium: "Folk Art Watercolor",
-    priceOriginal: 6500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
-    featured: false,
-    category: "watercolor",
-    available: true,
-    description: "An intricate traditional floral study featuring rich earth tones, organic details, and fine lining."
-  }
-];
+const paintings = window.paintingsData ? window.paintingsData.originals : [];
 
 // Bulk Order Pricing Rates (INR per piece)
 const bulkRate = 200;
 
 // Bulk Variations Dataset
-const bulkPaintings = {
-  "watercolor-landscape": [
-    {
-      id: "wl1",
-      title: "Lake Reflections",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_landscape_lake_boat.jpg",
-      description: "A serene lake view with a small boat resting near the shore under soft hills."
-    },
-    {
-      id: "wl2",
-      title: "River Sunset",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_landscape_river_sunset.jpg",
-      description: "Warm sunset hues reflecting on a gentle river winding through low hills."
-    },
-    {
-      id: "wl3",
-      title: "Monochrome Village",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_landscape_monochrome_village.jpg",
-      description: "A traditional monochrome wash study showing simple village huts and trees."
-    },
-    {
-      id: "wl4",
-      title: "Evening Bonfire",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_landscape_village_bonfire.jpg",
-      description: "A cozy evening scene in a village with a bonfire, trees, and figures."
-    },
-    {
-      id: "wl5",
-      title: "Village Pathway",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_landscape_village_path.jpg",
-      description: "A rustic village lane winding past thatched huts and lush green trees."
-    },
-    {
-      id: "wl6",
-      title: "Folk Art Peacock",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
-      description: "A vibrant watercolor depiction of a ceremonial peacock with intricate details."
-    },
-    {
-      id: "wl7",
-      title: "Decorative Floral Vase",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM (1).jpeg",
-      description: "A classic watercolor composition of flowers in a decorative traditional vase."
-    },
-    {
-      id: "wl8",
-      title: "Royal Elephant Portrait",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM (1).jpeg",
-      description: "A detailed watercolor illustration of a ceremonial royal elephant in profile."
-    },
-    {
-      id: "wl9",
-      title: "Lotus Pond Harmony",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.27 PM.jpeg",
-      description: "A peaceful composition of blooming lotuses and stylized waves in watercolor."
-    },
-    {
-      id: "wl10",
-      title: "Folk Bird in Vines",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.28 PM (1).jpeg",
-      description: "A stylized bird perched amidst decorative floral vines and swirling leaves."
-    },
-    {
-      id: "wl11",
-      title: "Traditional Border Art",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.28 PM.jpeg",
-      description: "A repetitive traditional border pattern showcasing fine lining and brush precision."
-    },
-    {
-      id: "wl12",
-      title: "Forest Deer Study",
-      medium: "Watercolor on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.29 PM.jpeg",
-      description: "A stylized representation of a deer in a mythical forest setting in watercolor."
-    }
-  ],
-  "watercolor-folk-art": [
-    {
-      id: "wf1",
-      title: "Ceremonial Elephant",
-      medium: "Folk Art Watercolor",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_folk_art_elephant.jpg",
-      description: "A decorated traditional Indian elephant with fine patterns, lines, and stripes in folk art style."
-    },
-    {
-      id: "wf2",
-      title: "Golden Flora Study",
-      medium: "Folk Art Watercolor",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
-      description: "An intricate traditional floral study featuring rich pigment textures and patterns."
-    },
-    {
-      id: "wf3",
-      title: "Mandala Pattern",
-      medium: "Folk Art Watercolor",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM.jpeg",
-      description: "A beautifully detailed circular mandala pattern showcasing symmetry and folk geometry."
-    }
-  ],
-  "still-life": [
-    {
-      id: "sl1",
-      title: "Wine & Grapes Study",
-      medium: "Watercolor Still Life",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_still_life_wine.jpg",
-      description: "A classic watercolor study of a wine bottle, half-filled glass, and a bunch of grapes on a tabletop."
-    },
-    {
-      id: "sl2",
-      title: "Stacked Teacups",
-      medium: "Watercolor Still Life",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/watercolor_still_life_teacups.jpg",
-      description: "A colorful, vibrant study of stacked ceramic teacups highlighting shadows and glazed surfaces."
-    },
-    {
-      id: "sl3",
-      title: "Jug and Fruits Sketch",
-      medium: "Graphite on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/pencil_still_life_jug_fruit.jpg",
-      description: "A detailed graphite study of a traditional jug, apple, and pear capturing fine textures and light source gradients."
-    },
-    {
-      id: "sl4",
-      title: "Textured Botanical Sketch",
-      medium: "Graphite on Paper",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM.jpeg",
-      description: "A delicate study of botanical leaves and stems highlighting organic textures."
-    },
-    {
-      id: "sl5",
-      title: "Symmetrical Bloom",
-      medium: "Watercolor Still Life",
-      price: 200,
-      dimensions: "A3 Size",
-      image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM.jpeg",
-      description: "A traditional symmetrical floral pattern featuring vibrant hand-painted details."
-    }
-  ]
-};
+const bulkPaintings = window.paintingsData ? window.paintingsData.bulkPaintings : {};
 
 // Shop State
 let cart = [];
@@ -419,8 +179,8 @@ function renderGallery() {
   });
 
   const allGalleryItems = [
-    ...paintings.map(p => ({ ...p, isBulk: false })),
-    ...bulkCategoriesList
+    ...bulkCategoriesList,
+    ...paintings.map(p => ({ ...p, isBulk: false }))
   ];
 
   // Filter
@@ -515,7 +275,7 @@ function renderGallery() {
       return `
         <div class="artwork-card">
           <div class="artwork-img-container">
-            <img src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';">
+            <img src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/WhatsApp Image 2026-06-29 at 8.45.56 PM.jpeg';">
             <div class="artwork-badges">
               ${badgeHTML}
             </div>
@@ -544,7 +304,7 @@ function renderGallery() {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const id = parseInt(btn.getAttribute("data-id"));
-      openPaintingModal(id);
+      window.location.href = `painting-details.html?id=${id}&type=original`;
     });
   });
 
@@ -653,11 +413,13 @@ function addToCart(item, type) {
       return;
     }
 
-    let price, title;
+    let price, title, basePrice;
     if (type === "bulk-stock") {
-      price = 200;
+      basePrice = item.price || 200;
+      price = item.price || 200;
       title = `${item.title} (Bulk)`;
     } else {
+      basePrice = item.priceOriginal;
       price = item.priceOriginal;
       title = `${item.title} (Original Canvas)`;
     }
@@ -666,6 +428,7 @@ function addToCart(item, type) {
       cartItemId,
       id: item.id,
       title,
+      basePrice,
       price,
       type,
       qty: 1,
@@ -701,15 +464,17 @@ function removeFromCart(cartItemId) {
 
 function saveCart() {
   const totalBulkQty = cart.filter(item => item.type === "bulk-stock").reduce((sum, item) => sum + item.qty, 0);
-  let rate = 200;
+  let discountMultiplier = 1.0;
   if (totalBulkQty >= 10) {
-    rate = 100;
+    discountMultiplier = 0.50; // 50% discount
   } else if (totalBulkQty >= 5) {
-    rate = 150;
+    discountMultiplier = 0.75; // 25% discount
   }
   cart.forEach(item => {
     if (item.type === "bulk-stock") {
-      item.price = rate;
+      const base = item.id === "wl12" ? 500 : 200;
+      item.basePrice = base;
+      item.price = Math.round(base * discountMultiplier);
     }
   });
   localStorage.setItem("samridhi_art_cart", JSON.stringify(cart));
@@ -725,22 +490,41 @@ function updateCartUI() {
   countBadge.textContent = totalItems;
   countBadge.style.display = totalItems > 0 ? "block" : "none";
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  subtotalEl.textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  // finalTotal is what the customer actually pays
+  const finalTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  
+  // Calculate total original subtotal and savings
+  const originalSubtotal = cart.reduce((sum, item) => {
+    const base = item.type === "bulk-stock" ? (item.id === "wl12" ? 500 : 200) : (item.basePrice || item.price || 200);
+    return sum + (base * item.qty);
+  }, 0);
+  const totalBulkSavings = originalSubtotal - finalTotal;
 
-  // Calculate total savings
-  const totalBulkSavings = cart.filter(item => item.type === "bulk-stock").reduce((sum, item) => sum + ((200 - item.price) * item.qty), 0);
+  // Manage display elements for the detailed pricing breakdown
+  const origContainer = document.getElementById("cart-original-subtotal-container");
+  const origVal = document.getElementById("cart-original-subtotal-val");
   const savingsContainer = document.getElementById("cart-savings-container");
   const savingsVal = document.getElementById("cart-savings-val");
-  
-  if (savingsContainer && savingsVal) {
-    if (totalBulkSavings > 0) {
-      savingsContainer.style.display = "flex";
-      savingsVal.textContent = `-₹${totalBulkSavings.toLocaleString()}`;
-    } else {
-      savingsContainer.style.display = "none";
+  const totalLabel = document.getElementById("cart-total-label");
+
+  if (totalBulkSavings > 0) {
+    if (origContainer && origVal) {
+      origContainer.style.display = "flex";
+      origVal.textContent = `₹${originalSubtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     }
+    if (savingsContainer && savingsVal) {
+      savingsContainer.style.display = "flex";
+      savingsVal.textContent = `-₹${totalBulkSavings.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+    if (totalLabel) totalLabel.textContent = "Total";
+  } else {
+    if (origContainer) origContainer.style.display = "none";
+    if (savingsContainer) savingsContainer.style.display = "none";
+    if (totalLabel) totalLabel.textContent = "Subtotal";
   }
+
+  // Display the final amount to pay
+  subtotalEl.textContent = `₹${finalTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
   if (cart.length === 0) {
     itemsContainer.innerHTML = `
@@ -755,16 +539,17 @@ function updateCartUI() {
   }
 
   itemsContainer.innerHTML = cart.map(item => {
-    const qtyHTML = `<span class="cart-item-option">Qty: 1</span>`;
+    const itemOrigPrice = item.type === "bulk-stock" ? (item.id === "wl12" ? 500 : 200) : (item.basePrice || item.price || 200);
+    const qtyHTML = `<span class="cart-item-option">Qty: ${item.qty}</span>`;
 
     const unitPriceHTML = item.type === "bulk-stock"
-      ? `<span class="cart-item-option" style="color: var(--accent-gold); font-weight: 500;">₹${item.price} each</span>`
+      ? `<span class="cart-item-option" style="color: var(--accent-gold); font-weight: 500;">₹${itemOrigPrice} each</span>`
       : "";
 
     return `
       <div class="cart-item">
         <div class="cart-item-img">
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/paintings/WhatsApp Image 2026-06-29 at 8.45.56 PM.jpeg';">
         </div>
         <div class="cart-item-info">
           <h4>${item.title}</h4>
@@ -773,7 +558,7 @@ function updateCartUI() {
           ${qtyHTML}
         </div>
         <div class="cart-item-right">
-          <span class="cart-item-price">₹${(item.price * item.qty).toLocaleString()}</span>
+          <span class="cart-item-price">₹${(itemOrigPrice * item.qty).toLocaleString()}</span>
           <button class="cart-item-remove" data-id="${item.cartItemId}"><i class="fa-solid fa-trash-can"></i></button>
         </div>
       </div>

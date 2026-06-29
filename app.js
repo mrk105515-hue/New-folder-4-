@@ -23,60 +23,7 @@ if (typeof firebase !== 'undefined') {
 }
 
 // Application Data
-const paintings = [
-  {
-    id: 1,
-    title: "Folk Art Peacock",
-    medium: "Watercolor on Paper",
-    priceOriginal: 8500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
-    featured: true,
-    category: "watercolor",
-    available: true,
-    description: "A vibrant hand-painted depiction of a ceremonial peacock with intricate traditional detailing and patterns."
-  },
-  {
-    id: 2,
-    title: "Decorative Floral Vase",
-    medium: "Watercolor on Paper",
-    priceOriginal: 7500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.25 PM (1).jpeg",
-    featured: false,
-    category: "watercolor",
-    available: true,
-    description: "A beautiful hand-painted composition of blooming flowers inside an ornate, traditionally decorated vase."
-  },
-  {
-    id: 3,
-    title: "Royal Elephant Portrait",
-    medium: "Watercolor on Paper",
-    priceOriginal: 9500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.26 PM (1).jpeg",
-    featured: false,
-    category: "watercolor",
-    available: true,
-    description: "A detailed hand-painted illustration of a decorated royal elephant, showcasing traditional Indian folk patterns."
-  },
-  {
-    id: 4,
-    title: "Golden Flora Study",
-    medium: "Folk Art Watercolor",
-    priceOriginal: 6500,
-    widthInches: 12,
-    heightInches: 16,
-    image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
-    featured: false,
-    category: "watercolor",
-    available: true,
-    description: "An intricate traditional floral study featuring rich earth tones, organic details, and fine lining."
-  }
-];
+const paintings = window.paintingsData ? window.paintingsData.originals : [];
 
 const courses = [
   {
@@ -383,13 +330,15 @@ function addToCart(item, type) {
       return;
     }
 
-    const price = type === "original" ? item.priceOriginal : item.price;
+    const basePrice = type === "original" ? item.priceOriginal : (item.price || 200);
+    const price = type === "original" ? item.priceOriginal : (item.price || 200);
     const title = type === "original" ? `${item.title} (Original Canvas)` : item.title;
     
     cart.push({
       cartItemId,
       id: item.id,
       title,
+      basePrice,
       price,
       type,
       qty: 1,
@@ -429,15 +378,17 @@ function removeFromCart(cartItemId) {
 
 function saveCart() {
   const totalBulkQty = cart.filter(item => item.type === "bulk-stock").reduce((sum, item) => sum + item.qty, 0);
-  let rate = 200;
+  let discountMultiplier = 1.0;
   if (totalBulkQty >= 10) {
-    rate = 100;
+    discountMultiplier = 0.50; // 50% discount
   } else if (totalBulkQty >= 5) {
-    rate = 150;
+    discountMultiplier = 0.75; // 25% discount
   }
   cart.forEach(item => {
     if (item.type === "bulk-stock") {
-      item.price = rate;
+      const base = item.id === "wl12" ? 500 : 200;
+      item.basePrice = base;
+      item.price = Math.round(base * discountMultiplier);
     }
   });
   localStorage.setItem("samridhi_art_cart", JSON.stringify(cart));
@@ -457,23 +408,41 @@ function updateCartUI() {
     countBadge.style.display = "none";
   }
 
-  // Calculate prices
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  subtotalEl.textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  // finalTotal is what the customer actually pays
+  const finalTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  
+  // Calculate total original subtotal and savings
+  const originalSubtotal = cart.reduce((sum, item) => {
+    const base = item.type === "bulk-stock" ? (item.id === "wl12" ? 500 : 200) : (item.basePrice || item.price || 200);
+    return sum + (base * item.qty);
+  }, 0);
+  const totalBulkSavings = originalSubtotal - finalTotal;
 
-  // Calculate total savings
-  const totalBulkSavings = cart.filter(item => item.type === "bulk-stock").reduce((sum, item) => sum + ((200 - item.price) * item.qty), 0);
+  // Manage display elements for the detailed pricing breakdown
+  const origContainer = document.getElementById("cart-original-subtotal-container");
+  const origVal = document.getElementById("cart-original-subtotal-val");
   const savingsContainer = document.getElementById("cart-savings-container");
   const savingsVal = document.getElementById("cart-savings-val");
-  
-  if (savingsContainer && savingsVal) {
-    if (totalBulkSavings > 0) {
-      savingsContainer.style.display = "flex";
-      savingsVal.textContent = `-₹${totalBulkSavings.toLocaleString()}`;
-    } else {
-      savingsContainer.style.display = "none";
+  const totalLabel = document.getElementById("cart-total-label");
+
+  if (totalBulkSavings > 0) {
+    if (origContainer && origVal) {
+      origContainer.style.display = "flex";
+      origVal.textContent = `₹${originalSubtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     }
+    if (savingsContainer && savingsVal) {
+      savingsContainer.style.display = "flex";
+      savingsVal.textContent = `-₹${totalBulkSavings.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+    if (totalLabel) totalLabel.textContent = "Total";
+  } else {
+    if (origContainer) origContainer.style.display = "none";
+    if (savingsContainer) savingsContainer.style.display = "none";
+    if (totalLabel) totalLabel.textContent = "Subtotal";
   }
+
+  // Display the final amount to pay
+  subtotalEl.textContent = `₹${finalTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
   // Redraw items
   if (cart.length === 0) {
@@ -496,6 +465,7 @@ function updateCartUI() {
   }
 
   itemsContainer.innerHTML = cart.map(item => {
+    const itemOrigPrice = item.type === "bulk-stock" ? (item.id === "wl12" ? 500 : 200) : (item.basePrice || item.price || 200);
     const showQtyControl = item.type !== "original";
     const qtyHTML = showQtyControl
       ? `
@@ -508,13 +478,13 @@ function updateCartUI() {
       : `<span class="cart-item-option">Original (Qty: 1)</span>`;
 
     const unitPriceHTML = item.type === "bulk-stock"
-      ? `<span class="cart-item-option" style="color: var(--accent-gold); font-weight: 500;">₹${item.price} each</span>`
+      ? `<span class="cart-item-option" style="color: var(--accent-gold); font-weight: 500;">₹${itemOrigPrice} each</span>`
       : "";
 
     return `
       <div class="cart-item">
         <div class="cart-item-img">
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/paintings/WhatsApp Image 2026-06-29 at 8.45.56 PM.jpeg';">
         </div>
         <div class="cart-item-info">
           <h4>${item.title}</h4>
@@ -523,7 +493,7 @@ function updateCartUI() {
           ${qtyHTML}
         </div>
         <div class="cart-item-right">
-          <span class="cart-item-price">₹${(item.price * item.qty).toLocaleString()}</span>
+          <span class="cart-item-price">₹${(itemOrigPrice * item.qty).toLocaleString()}</span>
           <button class="cart-item-remove" data-id="${item.cartItemId}"><i class="fa-solid fa-trash-can"></i></button>
         </div>
       </div>
