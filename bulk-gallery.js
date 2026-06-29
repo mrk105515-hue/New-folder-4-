@@ -25,17 +25,17 @@ if (typeof firebase !== 'undefined') {
 // Bulk Category Gallery Dataset
 const bulkCategoryDetails = {
   "watercolor-landscape": {
-    title: "Watercolor Landscape Collection",
+    title: "Watercolor Landscape and Composition Collection (₹200 - ₹400)",
     description: "Hand-painted atmospheric landscapes featuring serene mountains, lakeside trees, and coastal vistas created with gentle washes of watercolor on archival cotton paper.",
     paintings: window.paintingsData ? window.paintingsData.bulkPaintings["watercolor-landscape"] : []
   },
   "watercolor-folk-art": {
-    title: "Watercolor Folk Art Collection",
+    title: "Watercolor Folk Art Collection (₹200 - ₹300)",
     description: "Traditional floral arrangements, regional patterns, and cultural heritage art styles with intricate design outlines.",
     paintings: window.paintingsData ? window.paintingsData.bulkPaintings["watercolor-folk-art"] : []
   },
   "still-life": {
-    title: "Still Life Collection",
+    title: "Still Life Collection (₹200)",
     description: "Delicate watercolor compositions and graphite pencil drawings featuring household artifacts, stacked teacups, fruit bowls, and botanical elements.",
     paintings: window.paintingsData ? window.paintingsData.bulkPaintings["still-life"] : []
   }

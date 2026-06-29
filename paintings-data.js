@@ -145,7 +145,7 @@ window.paintingsData = {
         id: "wl12",
         title: "Forest Deer Study",
         medium: "Watercolor on Paper",
-        price: 500,
+        price: 400,
         dimensions: "A3 Size",
         image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.29 PM.jpeg",
         description: "A stylized representation of a deer in a mythical forest setting in watercolor."

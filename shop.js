@@ -145,7 +145,7 @@ function renderGallery() {
   const bulkCategoriesList = [
     {
       categoryKey: "watercolor-landscape",
-      title: "Watercolor Landscape",
+      title: "Watercolor Landscape and Composition",
       medium: "Watercolor Series (Bulk)",
       dimensions: "A3 Size",
       description: "Atmospheric mountains, lakeside trees, and coastal vistas created with gentle washes of watercolor.",
@@ -231,13 +231,18 @@ function renderGallery() {
       const defaultVariantId = pList.length > 0 ? pList[0].id : art.id;
       const defaultTitle = pList.length > 0 ? `${pList[0].title} (Bulk)` : art.title;
 
+      const prices = pList.map(p => p.price || 200);
+      const minPrice = prices.length > 0 ? Math.min(...prices) : 200;
+      const maxPrice = prices.length > 0 ? Math.max(...prices) : 200;
+      const priceStr = minPrice === maxPrice ? `₹${minPrice}` : `₹${minPrice} - ₹${maxPrice}`;
+
       return `
         <div class="artwork-card bulk-artwork-card" data-category="${art.categoryKey}" data-variant="${defaultVariantId}">
           <div class="artwork-img-container">
             <img class="bulk-main-image" src="${art.image}" alt="${art.title}" onerror="this.src='assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg';" style="width: 100%; height: 100%; object-fit: contain;">
             <div class="artwork-badges">
               <span class="badge badge-bulk-tag">Bulk Order</span>
-              <span class="badge badge-print">₹200 / piece</span>
+              <span class="badge badge-print">${priceStr} / piece</span>
             </div>
             <div class="artwork-overlay">
               <div style="display: flex; gap: 0.5rem;">
@@ -256,7 +261,7 @@ function renderGallery() {
 
             <div class="artwork-details-row">
               <span class="artwork-size">${art.dimensions}</span>
-              <span class="artwork-price" style="color: var(--accent-terracotta);">₹200</span>
+              <span class="artwork-price" style="color: var(--accent-terracotta);">${priceStr}</span>
             </div>
           </div>
         </div>
