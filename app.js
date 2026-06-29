@@ -386,7 +386,7 @@ function saveCart() {
   }
   cart.forEach(item => {
     if (item.type === "bulk-stock") {
-      const base = item.id === "wl12" ? 500 : 200;
+      const base = window.paintingsData ? window.paintingsData.getBulkBasePrice(item.id) : 200;
       item.basePrice = base;
       item.price = Math.round(base * discountMultiplier);
     }
@@ -413,7 +413,7 @@ function updateCartUI() {
   
   // Calculate total original subtotal and savings
   const originalSubtotal = cart.reduce((sum, item) => {
-    const base = item.type === "bulk-stock" ? (item.id === "wl12" ? 500 : 200) : (item.basePrice || item.price || 200);
+    const base = item.type === "bulk-stock" ? (window.paintingsData ? window.paintingsData.getBulkBasePrice(item.id) : 200) : (item.basePrice || item.price || 200);
     return sum + (base * item.qty);
   }, 0);
   const totalBulkSavings = originalSubtotal - finalTotal;
@@ -465,7 +465,7 @@ function updateCartUI() {
   }
 
   itemsContainer.innerHTML = cart.map(item => {
-    const itemOrigPrice = item.type === "bulk-stock" ? (item.id === "wl12" ? 500 : 200) : (item.basePrice || item.price || 200);
+    const itemOrigPrice = item.type === "bulk-stock" ? (window.paintingsData ? window.paintingsData.getBulkBasePrice(item.id) : 200) : (item.basePrice || item.price || 200);
     const showQtyControl = item.type !== "original";
     const qtyHTML = showQtyControl
       ? `

@@ -55,7 +55,7 @@ window.paintingsData = {
         id: "wl2",
         title: "River Sunset",
         medium: "Watercolor on Paper",
-        price: 200,
+        price: 300,
         dimensions: "A3 Size",
         image: "assets/paintings/bulk/watercolor_landscape_river_sunset.jpg",
         description: "Warm sunset hues reflecting on a gentle river winding through low hills."
@@ -91,7 +91,7 @@ window.paintingsData = {
         id: "wl6",
         title: "Folk Art Peacock",
         medium: "Watercolor on Paper",
-        price: 200,
+        price: 300,
         dimensions: "A3 Size",
         image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.24 PM (1).jpeg",
         description: "A vibrant watercolor depiction of a ceremonial peacock with intricate details."
@@ -116,9 +116,9 @@ window.paintingsData = {
       },
       {
         id: "wl9",
-        title: "Lotus Pond Harmony",
+        title: "Mountain Valley",
         medium: "Watercolor on Paper",
-        price: 200,
+        price: 300,
         dimensions: "A3 Size",
         image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.27 PM.jpeg",
         description: "A peaceful composition of blooming lotuses and stylized waves in watercolor."
@@ -165,7 +165,7 @@ window.paintingsData = {
         id: "wf2",
         title: "Golden Flora Study",
         medium: "Folk Art Watercolor",
-        price: 200,
+        price: 300,
         dimensions: "A3 Size",
         image: "assets/paintings/bulk/WhatsApp Image 2026-06-27 at 9.50.23 PM.jpeg",
         description: "An intricate traditional floral study featuring rich pigment textures and patterns."
@@ -228,4 +228,13 @@ window.paintingsData = {
       }
     ]
   }
+};
+
+window.paintingsData.getBulkBasePrice = function(id) {
+  if (!id) return 200;
+  for (const cat in window.paintingsData.bulkPaintings) {
+    const found = window.paintingsData.bulkPaintings[cat].find(p => p.id === id);
+    if (found) return found.price;
+  }
+  return 200;
 };
