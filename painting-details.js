@@ -519,6 +519,35 @@ function initCheckoutModal() {
     });
   }
 
+  // Handle Google Sign-In
+  const googleBtn = document.querySelector(".google-signin-btn");
+  if (googleBtn) {
+    googleBtn.addEventListener("click", async () => {
+      if (typeof auth === 'undefined') return;
+      googleBtn.disabled = true;
+      const originalText = googleBtn.innerHTML;
+      googleBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Connecting...`;
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+        if (user && db) {
+          await db.collection("users").doc(user.uid).set({
+            email: user.email,
+            displayName: user.displayName || user.email.split('@')[0],
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        }
+      } catch (err) {
+        console.error("Google Sign-In Error:", err);
+        alert("Google Sign-In Error: " + err.message);
+      } finally {
+        googleBtn.disabled = false;
+        googleBtn.innerHTML = originalText;
+      }
+    });
+  }
+
   const paymentForm = document.getElementById("checkout-form-payment");
   paymentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
