@@ -946,8 +946,11 @@ function initCheckout() {
   }
 
   function openCheckoutStep(stepNumber) {
+    const stepContent = document.getElementById(`step-content-${stepNumber}`);
+    if (!stepContent) return;
+
     document.querySelectorAll(".checkout-step-content").forEach(el => el.classList.remove("active"));
-    document.getElementById(`step-content-${stepNumber}`).classList.add("active");
+    stepContent.classList.add("active");
 
     document.querySelectorAll(".step-node").forEach(node => {
       const stepVal = parseInt(node.getAttribute("data-step"));
@@ -958,6 +961,20 @@ function initCheckout() {
         node.classList.add("completed");
       }
     });
+
+    const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock");
+    const shippingContainer = document.getElementById("shipping-address-container");
+    const addressInput = document.getElementById("chk-address");
+
+    if (shippingContainer && addressInput) {
+      if (hasPhysical) {
+        shippingContainer.style.display = "block";
+        addressInput.required = true;
+      } else {
+        shippingContainer.style.display = "none";
+        addressInput.required = false;
+      }
+    }
 
     if (stepNumber === 2) {
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
