@@ -461,6 +461,24 @@ function updateCartUI() {
   // Display the final amount to pay
   subtotalEl.textContent = `₹${finalTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
+  // Update dynamic shipping notice in the cart footer
+  const shippingNoticeEl = document.getElementById("cart-shipping-notice");
+  if (shippingNoticeEl) {
+    const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock" || (typeof c.id === "string" && (c.id.startsWith("wl") || c.id.startsWith("wf") || c.id.startsWith("sl"))) || typeof c.id === "number");
+    if (cart.length === 0 || !hasPhysical) {
+      shippingNoticeEl.style.display = "none";
+      shippingNoticeEl.innerHTML = "";
+    } else {
+      shippingNoticeEl.style.display = "block";
+      if (finalTotal < 500) {
+        const remaining = 500 - finalTotal;
+        shippingNoticeEl.innerHTML = `<i class="fa-solid fa-truck-fast" style="color: var(--accent-gold); margin-right: 0.35rem;"></i> Add <strong>₹${remaining.toLocaleString()}</strong> more for <strong>FREE Shipping</strong>!<br><span style="font-size: 0.75rem; opacity: 0.8;">Otherwise, a ₹50 shipping charge applies.</span>`;
+      } else {
+        shippingNoticeEl.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--success); margin-right: 0.35rem;"></i> You qualify for <strong>FREE Shipping</strong>!`;
+      }
+    }
+  }
+
   if (cart.length === 0) {
     itemsContainer.innerHTML = `
       <div class="cart-empty-message">
