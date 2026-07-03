@@ -553,7 +553,10 @@ function initCheckoutModal() {
     e.preventDefault();
     
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const amountInPaise = Math.round(subtotal * 100);
+    const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock" || (typeof c.id === "string" && (c.id.startsWith("wl") || c.id.startsWith("wf") || c.id.startsWith("sl"))) || typeof c.id === "number");
+    const shipping = (hasPhysical && subtotal < 500) ? 50 : 0;
+    const total = subtotal + shipping;
+    const amountInPaise = Math.round(total * 100);
 
     const paySubmitBtn = paymentForm.querySelector('button[type="submit"]');
     const originalText = "Pay with Razorpay";
@@ -625,7 +628,7 @@ function openCheckoutStep(stepNumber) {
     }
   });
 
-  const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock");
+  const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock" || (typeof c.id === "string" && (c.id.startsWith("wl") || c.id.startsWith("wf") || c.id.startsWith("sl"))) || typeof c.id === "number");
   const shippingContainer = document.getElementById("shipping-address-container");
   const addressInput = document.getElementById("chk-address");
 
@@ -641,8 +644,15 @@ function openCheckoutStep(stepNumber) {
 
   if (stepNumber === 2) {
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    document.getElementById("summary-subtotal").textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    document.getElementById("summary-total").textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    const shipping = (hasPhysical && subtotal < 500) ? 50 : 0; 
+    const total = subtotal + shipping;
+
+    const subtotalEl = document.getElementById("summary-subtotal");
+    const shippingEl = document.getElementById("summary-shipping");
+    const totalEl = document.getElementById("summary-total");
+    if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    if (shippingEl) shippingEl.textContent = shipping > 0 ? `₹${shipping.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : "FREE";
+    if (totalEl) totalEl.textContent = `₹${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
   }
 }
 
