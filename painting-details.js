@@ -1,23 +1,52 @@
-// Firebase configurations (must match app.js)
+// Firebase Configuration (Replace with your actual Firebase project config values)
 const firebaseConfig = {
-  apiKey: "AIzaSyAs-example-key",
-  authDomain: "samridhi-art-studio.firebaseapp.com",
-  projectId: "samridhi-art-studio",
-  storageBucket: "samridhi-art-studio.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:abcdef123456"
+  apiKey: "AIzaSyBzbHVoBlL3HbjJkypfTE5Qvj1amICtwwg",
+  authDomain: "swarnim-store.firebaseapp.com",
+  projectId: "swarnim-store",
+  storageBucket: "swarnim-store.firebasestorage.app",
+  messagingSenderId: "460537722995",
+  appId: "1:460537722995:web:44770c0895c1b127199206",
+  measurementId: "G-CH1E37H3RZ"
 };
 
-// Initialize Firebase
+// Initialize Firebase compat
+let auth, db, functions;
 if (typeof firebase !== 'undefined') {
-  firebase.initializeApp(firebaseConfig);
+  try {
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+    functions = firebase.functions();
+  } catch (err) {
+    console.error("Firebase initialization failed:", err);
+  }
 }
 
-const auth = typeof firebase !== 'undefined' ? firebase.auth() : null;
-const functions = typeof firebase !== 'undefined' ? firebase.functions() : null;
-
 // Cart State
+const paintings = window.paintingsData ? window.paintingsData.originals : [];
 let cart = [];
+
+function syncSoldPaintings() {
+  if (typeof db !== "undefined" && db) {
+    db.collection("sold_paintings").get().then(snap => {
+      let updated = false;
+      snap.forEach(doc => {
+        const pId = parseInt(doc.id);
+        const paintObj = paintings.find(p => p.id === pId);
+        if (paintObj && paintObj.available) {
+          paintObj.available = false;
+          updated = true;
+        }
+      });
+      if (updated) {
+        if (typeof initSimulator === "function") initSimulator();
+        if (typeof renderGallery === "function") renderGallery();
+        if (typeof loadProductDetails === "function") loadProductDetails();
+      }
+    }).catch(err => console.warn("Failed to load sold paintings list:", err));
+  }
+}
+
 let currentPainting = null;
 let currentPaintingType = "original";
 
@@ -90,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProductDetails();
   updateCartUI();
   initCheckoutModal();
+  syncSoldPaintings();
 });
 
 /* Parse Query Parameters & Load details */
@@ -600,8 +630,62 @@ function initCheckoutModal() {
         "description": "Original Painting Purchase",
         "image": "assets/artist_portrait.jpg",
         "order_id": orderId,
-        "handler": function (response){
-          openCheckoutStep(3);
+        "handler": async function (response) {
+          paySubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying Payment...`;
+
+          try {
+            // Verify signature on backend via Firebase Cloud Function
+            const verifyRazorpayPaymentFn = functions.httpsCallable('verifyRazorpayPayment');
+            const verifyResult = await verifyRazorpayPaymentFn({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            });
+
+            if (verifyResult.data && verifyResult.data.verified) {
+              paySubmitBtn.disabled = false;
+              paySubmitBtn.textContent = originalText;
+
+              // Mark originals sold locally and in Firestore
+              const soldPromises = [];
+              cart.forEach(item => {
+                if (item.type === "original") {
+                  const paintObj = paintings.find(p => p.id === item.id);
+                  if (paintObj) paintObj.available = false;
+                  if (typeof db !== "undefined" && db) {
+                    soldPromises.push(
+                      db.collection("sold_paintings").doc(item.id.toString()).set({
+                        sold: true,
+                        sold_at: firebase.firestore.FieldValue.serverTimestamp()
+                      }).catch(err => console.warn("Failed to mark painting sold in db:", err))
+                    );
+                  }
+                }
+              });
+              if (soldPromises.length > 0) {
+                await Promise.all(soldPromises);
+              }
+
+              // Reset cart
+              cart = [];
+              saveCart();
+              updateCartUI();
+              if (typeof loadProductDetails === "function") loadProductDetails();
+
+              const successParagraph = document.querySelector(".success-screen p");
+              if (successParagraph) {
+                successParagraph.innerHTML = `Your payment was successfully processed. Payment ID: <strong>${response.razorpay_payment_id}</strong>. A confirmation email has been dispatched.`;
+              }
+
+              openCheckoutStep(3);
+            } else {
+              throw new Error("Payment signature verification failed.");
+            }
+          } catch (verifyError) {
+            alert("Verification Error: " + verifyError.message);
+            paySubmitBtn.disabled = false;
+            paySubmitBtn.textContent = originalText;
+          }
         },
         "prefill": {
           "email": auth.currentUser.email

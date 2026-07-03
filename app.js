@@ -25,6 +25,27 @@ if (typeof firebase !== 'undefined') {
 // Application Data
 const paintings = window.paintingsData ? window.paintingsData.originals : [];
 
+function syncSoldPaintings() {
+  if (typeof db !== "undefined" && db) {
+    db.collection("sold_paintings").get().then(snap => {
+      let updated = false;
+      snap.forEach(doc => {
+        const pId = parseInt(doc.id);
+        const paintObj = paintings.find(p => p.id === pId);
+        if (paintObj && paintObj.available) {
+          paintObj.available = false;
+          updated = true;
+        }
+      });
+      if (updated) {
+        if (typeof initSimulator === "function") initSimulator();
+        if (typeof renderGallery === "function") renderGallery();
+        if (typeof renderArtDetails === "function") renderArtDetails();
+      }
+    }).catch(err => console.warn("Failed to load sold paintings list:", err));
+  }
+}
+
 const courses = [
   {
     id: "c2",
@@ -62,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCheckout();
   initContactForm();
   updateCartUI();
+  syncSoldPaintings();
 });
 
 /* Navigation Scripts */
@@ -993,13 +1015,25 @@ function initCheckout() {
                 paySubmitBtn.disabled = false;
                 paySubmitBtn.textContent = originalText;
 
-                // Mark originals sold
-                cart.forEach(item => {
-                  if (item.type === "original") {
-                    const paintObj = paintings.find(p => p.id === item.id);
-                    if (paintObj) paintObj.available = false;
-                  }
-                });
+                 // Mark originals sold locally and in Firestore
+                 const soldPromises = [];
+                 cart.forEach(item => {
+                   if (item.type === "original") {
+                     const paintObj = paintings.find(p => p.id === item.id);
+                     if (paintObj) paintObj.available = false;
+                     if (typeof db !== "undefined" && db) {
+                       soldPromises.push(
+                         db.collection("sold_paintings").doc(item.id.toString()).set({
+                           sold: true,
+                           sold_at: firebase.firestore.FieldValue.serverTimestamp()
+                         }).catch(err => console.warn("Failed to mark painting sold in db:", err))
+                       );
+                     }
+                   }
+                 });
+                 if (soldPromises.length > 0) {
+                   await Promise.all(soldPromises);
+                 }
                 
                 // Reset cart
                 cart = [];
