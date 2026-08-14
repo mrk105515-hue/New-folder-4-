@@ -187,6 +187,25 @@ function renderCourses() {
   
   container.innerHTML = courses.map(course => {
     if (course.upcoming) {
+      if (course.isCustomOrder) {
+        return `
+          <div class="course-card">
+            <div class="course-img-container">
+              <img src="${course.image}" alt="${course.title}">
+              <span class="course-badge" style="background: var(--accent-gold); color: white;">Custom Service</span>
+            </div>
+            <div class="course-content" style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;">
+              <div>
+                <h3 class="course-title" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">${course.title}</h3>
+                <p class="course-description" style="color: var(--text-secondary); margin-bottom: 2rem;">Commission an exclusive artwork tailored to your personal requirements, academic practical assignments, or special gifting occasions.</p>
+              </div>
+              <div class="course-footer" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+                <a href="commission.html" class="btn btn-terracotta" style="width: 100%; text-align: center; display: block;">Request Commission</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
       return `
         <div class="course-card">
           <div class="course-img-container">
@@ -314,7 +333,7 @@ function initSimulator() {
     // (artwork_inches / simulated_wall_inches) * scaling_factor
     // Let's say a 40" wide painting occupies roughly 38% of the wall width.
     const baseScaleFactor = 0.95; 
-    const calculatedWidth = (art.widthInches / 100) * 100 * baseScaleFactor; // scale relative to room box size
+    const calculatedWidth = (art.widthInches / 75) * 100 * baseScaleFactor; // scale relative to room box size
     const aspect = art.heightInches / art.widthInches;
     
     artFrame.style.width = `${calculatedWidth}%`;

@@ -154,15 +154,21 @@
   <!-- Commission Customized Page -->
   <main class="commission-page">
     <div class="commission-form-container">
-      <div class="commission-header">
-        <h1>Customized Art Commission</h1>
-        <p>
-          Collaborate with Samridhi to create a unique painting tailored for your space. Please share your project details and info below.
+      <div class="upcoming-banner" style="background: rgba(197, 155, 63, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 2.2rem; text-align: center; margin-bottom: 2rem; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);">
+        <span class="badge" style="background: var(--accent-terracotta); color: white; padding: 0.45rem 0.9rem; border-radius: 4px; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; display: inline-block; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(224, 122, 95, 0.25);">Upcoming Service</span>
+        <h1 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 0.85rem; font-weight: 600;">Customized Art Commissions</h1>
+        <p style="color: var(--text-secondary); line-height: 1.6; font-size: 1.02rem; max-width: 620px; margin: 0 auto 1.5rem;">
+          Collaborate with Samridhi to create a unique piece of art tailored to your specifications. This premium service is currently under preparation and will be launching soon.
         </p>
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px dashed var(--glass-border); display: inline-block; padding: 0.6rem 1.5rem; border-radius: 30px; color: var(--accent-gold); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.02em;">
+          Estimated launch: Late 2026
+        </div>
       </div>
 
-      <form id="commission-order-form">
-        <!-- Section 1: Contact Information -->
+      <form id="commission-order-form" style="background: var(--bg-primary); border: 1px solid var(--glass-border); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <h3 style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 0.5rem; text-align: center; font-weight: 500;">Get Notified When We Open</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem; text-align: center; margin-bottom: 1.8rem; line-height: 1.4;">Submit your details below to join our exclusive commission waiting list.</p>
+        
         <div class="form-row">
           <div class="form-group">
             <label for="comm-name">Full Name</label>
@@ -173,90 +179,28 @@
             <input type="email" id="comm-email" required placeholder="Samridhi@example.com">
           </div>
         </div>
-
-        <!-- Section 2: Artwork Specifications -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="comm-subject">Describe the Event</label>
-            <input type="text" id="comm-subject" required placeholder="e.g. Wedding, Anniversary, Birthday, Live Portrait">
-          </div>
-          <div class="form-group">
-            <label for="comm-medium">Preferred Painting Medium</label>
-            <select id="comm-medium" required>
-              <option value="" disabled selected>Select medium</option>
-              <option value="watercolor">Watercolor</option>
-              <option value="charcoal">Charcoal</option>
-              <option value="acrylic">Acrylic</option>
-            </select>
-          </div>
+        
+        <div class="form-group" style="margin-top: 1rem;">
+          <label for="comm-details">Briefly describe what you'd like to commission (Optional)</label>
+          <textarea id="comm-details" rows="3" placeholder="e.g. A custom family portrait or A3 landscape for assignment..."></textarea>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="comm-size">Dimensions</label>
-            <select id="comm-size" required>
-              <option value="" disabled selected>Select size</option>
-              <option value="A4">A4 Size - 210 x 297 mm</option>
-              <option value="A3">A3 Size - 297 x 420 mm</option>
-              <option value="A2">A2 Size - 420 x 594 mm</option>
-              <option value="custom">Custom Size (specify below)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="comm-budget">Approximate Budget (INR)</label>
-            <select id="comm-budget" required>
-              <option value="" disabled selected>Select budget range</option>
-              <option value="1500-3000">₹1,500 – ₹3,000</option>
-              <option value="3000-5000">₹3,000 – ₹5,000</option>
-              <option value="5000-10000">₹5,000 – ₹10,000</option>
-              <option value="10000-plus">₹10,000 +</option>
-              <option value="open">Flexible / Open Budget</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Section 3: Vision Details -->
-        <div class="form-group">
-          <label for="comm-details">Details of your vision</label>
-          <textarea id="comm-details" rows="5" required placeholder="Tell Samridhi about the room, color palette references, mood, or custom size dimensions requested..."></textarea>
-          <div class="form-group-note">For example: 'I want a horizontal alpine sunset above a navy wall. I prefer warm rust, gold leaf, and ochre accents.'</div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="comm-destination">Shipping Destination (Country / Zip Code)</label>
-            <input type="text" id="comm-destination" required placeholder="India (Zip 110001)">
-          </div>
-          <div class="form-group">
-            <label for="comm-deadline">Desired Deadline</label>
-            <input type="date" id="comm-deadline" required>
-            <div class="form-group-note">Minimum 4 days in the future.</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="comm-inspiration">Inspiration Image (Optional)</label>
-          <input type="file" id="comm-inspiration" accept="image/*" style="padding: 0.5rem 0;">
-          <div class="form-group-note">Upload a photo, sketch, or color reference to help Samridhi understand your vision.</div>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
-          Submit Commission Request
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+          Join the Waiting List
         </button>
       </form>
     </div>
   </main>
-
   <!-- Success Overlay with Redirect Timer -->
   <div class="submission-success-overlay" id="comm-success-screen">
     <i class="fa-solid fa-circle-check"></i>
-    <h2>Commission Request Sent!</h2>
+    <h2>Waiting List Joined!</h2>
     <p>
-      Thank you for sharing your vision. A summary of your request has been logged. An email will be sent soon. Samridhi will review the details and follow up in 2-3 business days.
+      Thank you for your interest. You have successfully joined the waiting list for Customized Art Commissions. We will notify you once ordering opens.
     </p>
     <div class="redirect-timer">
       <i class="fa-solid fa-spinner"></i>
-      <span>Returning to home page in <span id="timer-sec">20</span> seconds...</span>
+      <span>Returning to home page in <span id="timer-sec">10</span> seconds...</span>
     </div>
   </div>
 
@@ -312,13 +256,14 @@
       const requestData = {
         name: document.getElementById('comm-name').value,
         email: document.getElementById('comm-email').value,
-        subject: document.getElementById('comm-subject').value,
-        medium: document.getElementById('comm-medium').value,
-        size: document.getElementById('comm-size').value,
-        budget: document.getElementById('comm-budget').value,
+        subject: document.getElementById('comm-subject') ? document.getElementById('comm-subject').value : "Waiting List Signup",
+        medium: document.getElementById('comm-medium') ? document.getElementById('comm-medium').value : "N/A",
+        size: document.getElementById('comm-size') ? document.getElementById('comm-size').value : "N/A",
+        budget: document.getElementById('comm-budget') ? document.getElementById('comm-budget').value : "N/A",
         details: document.getElementById('comm-details').value,
-        destination: document.getElementById('comm-destination').value,
-        deadline: document.getElementById('comm-deadline').value,
+        destination: document.getElementById('comm-destination') ? document.getElementById('comm-destination').value : "N/A",
+        deadline: document.getElementById('comm-deadline') ? document.getElementById('comm-deadline').value : "N/A",
+        type: "waiting_list_signup",
         submittedAt: typeof firebase !== 'undefined' ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString()
       };
 
@@ -332,7 +277,7 @@
         successOverlay.classList.add('active');
         
         // Timer countdown
-        let seconds = 20;
+        let seconds = 10;
         const secondsSpan = document.getElementById('timer-sec');
         const interval = setInterval(() => {
           seconds--;
