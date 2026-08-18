@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Samridhi Fine Art</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Shared Stylesheet link -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --bg-admin-dark: #0f1115;
+      --bg-admin-card: #181c24;
+      --border-admin: rgba(255,255,255,0.08);
+      --accent-admin-gold: #c59b3f;
+      --accent-admin-red: #e07a5f;
+    }
+
+    body {
+      background-color: var(--bg-admin-dark);
+      color: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Admin Navbar */
+    .admin-nav {
+      background: rgba(24, 28, 36, 0.95);
+      border-bottom: 1px solid var(--border-admin);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-nav .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* Lock Screen Style */
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-admin-dark);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .lock-card {
+      background: var(--bg-admin-card);
+      border: 1px solid var(--border-admin);
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .lock-card i.lock-icon {
+      font-size: 3.5rem;
+      color: var(--accent-admin-gold);
+      margin-bottom: 1rem;
+    }
+
+    .lock-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .lock-card p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .lock-btn {
+      width: 100%;
+      background: var(--accent-admin-gold);
+      color: #000;
+      border: none;
+      padding: 0.8rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .lock-btn:hover {
+      background: #dfb350;
+      transform: translateY(-2px);
+    }
+
+    /* Dashboard Layout */
+    .admin-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .metric-card {
+      background: var(--bg-admin-card);
+      border: 1px solid var(--border-admin);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .metric-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      background: rgba(197, 155, 63, 0.1);
+      color: var(--accent-admin-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .metric-info h4 {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin: 0 0 0.25rem 0;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-info p {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      background: var(--bg-admin-card);
+      border: 1px solid var(--border-admin);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+
+    .search-wrapper input {
+      width: 100%;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border-admin);
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .search-wrapper i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+    }
+
+    .filter-group select {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border-admin);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Orders Card/List */
+    .orders-card {
+      background: var(--bg-admin-card);
+      border: 1px solid var(--border-admin);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(0,0,0,0.15);
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-admin);
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-admin);
+      font-size: 0.9rem;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .order-id-label {
+      font-weight: 600;
+      color: var(--accent-admin-gold);
+    }
+
+    .customer-info h5 {
+      margin: 0 0 0.25rem 0;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .customer-info p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 0.82rem;
+    }
+
+    .address-cell {
+      max-width: 250px;
+      word-wrap: break-word;
+      white-space: normal;
+      color: #cbd5e1;
+    }
+
+    .items-list {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: #cbd5e1;
+      font-size: 0.85rem;
+    }
+
+    .badge-status {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .status-paid {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .status-shipped {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-admin);
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--accent-admin-gold);
+      color: #000;
+    }
+
+    /* Modal Denied */
+    .denied-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 60vh;
+    }
+
+    .denied-container i {
+      font-size: 4rem;
+      color: var(--accent-admin-red);
+      margin-bottom: 1.5rem;
+    }
+
+    .denied-container h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Lock Screen Overlay -->
+  <div id="lock-screen">
+    <div class="lock-card">
+      <i class="fa-solid fa-user-shield lock-icon"></i>
+      <h2>Admin Access Required</h2>
+      <p>This panel is restricted to authorized creators only. Please sign in with your Google account to verify credentials.</p>
+      <button class="lock-btn" id="admin-login-btn">
+        <i class="fa-brands fa-google"></i> Connect Admin Account
+      </button>
+      <div id="login-error-msg" style="color: var(--accent-admin-red); margin-top: 1.25rem; font-size: 0.85rem; display: none;"></div>
+    </div>
+  </div>
+
+  <!-- Admin Navbar -->
+  <header class="admin-nav">
+    <a href="index.html" class="logo">
+      Samridhi<span class="logo-dot" style="background: var(--accent-admin-gold);"></span> <span style="font-size: 0.9rem; font-weight: 400; color: #94a3b8; font-family: sans-serif; letter-spacing: 0.05em; text-transform: uppercase; margin-left: 0.5rem;">Dashboard</span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <span id="admin-email-tag" style="font-size: 0.85rem; color: #94a3b8;"></span>
+      <button class="btn btn-secondary btn-sm" id="admin-signout-btn">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    
+    <!-- Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+        <div class="metric-info">
+          <h4>Total Revenue</h4>
+          <p id="metric-revenue">₹0.00</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fa-solid fa-box-open"></i></div>
+        <div class="metric-info">
+          <h4>Total Orders</h4>
+          <p id="metric-orders">0</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <div class="metric-info">
+          <h4>Pending Shipments</h4>
+          <p id="metric-pending">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="admin-search-input" placeholder="Search orders by ID, name, email...">
+      </div>
+      <div class="filter-group">
+        <select id="admin-status-filter">
+          <option value="all">All Orders</option>
+          <option value="paid">Paid (Unshipped)</option>
+          <option value="shipped">Shipped</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Orders Card List -->
+    <div class="orders-card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer Details</th>
+              <th>Items</th>
+              <th>Shipping Address</th>
+              <th>Total Paid</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table-body">
+            <!-- Populated dynamically via JS -->
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 3rem; color: #64748b;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                Loading order log...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzbHVoBlL3HbjJkypfTE5Qvj1amICtwwg",
+      authDomain: "swarnim-store.firebaseapp.com",
+      projectId: "swarnim-store",
+      storageBucket: "swarnim-store.firebasestorage.app",
+      messagingSenderId: "460537722995",
+      appId: "1:460537722995:web:44770c0895c1b127199206",
+      measurementId: "G-CH1E37H3RZ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const authorizedEmail = "sankalrajsts2122@gmail.com";
+    let ordersList = [];
+
+    // Auth state observer
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        if (user.email === authorizedEmail) {
+          document.getElementById('lock-screen').style.display = 'none';
+          document.getElementById('admin-email-tag').textContent = user.email;
+          loadAllOrders();
+        } else {
+          showAccessDenied();
+        }
+      } else {
+        document.getElementById('lock-screen').style.display = 'flex';
+      }
+    });
+
+    // Login Event Handler
+    document.getElementById('admin-login-btn').addEventListener('click', async () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const loginBtn = document.getElementById('admin-login-btn');
+      const errorMsg = document.getElementById('login-error-msg');
+      errorMsg.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...`;
+      try {
+        await auth.signInWithPopup(provider);
+      } catch (err) {
+        console.error("Auth error:", err);
+        errorMsg.textContent = "Sign-In Error: " + err.message;
+        errorMsg.style.display = 'block';
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = `<i class="fa-brands fa-google"></i> Connect Admin Account`;
+      }
+    });
+
+    // Sign out event
+    document.getElementById('admin-signout-btn').addEventListener('click', () => {
+      auth.signOut();
+    });
+
+    function showAccessDenied() {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.querySelector('main').innerHTML = `
+        <div class="denied-container">
+          <i class="fa-solid fa-user-lock"></i>
+          <h2>Access Denied</h2>
+          <p style="color: #94a3b8; max-width: 480px; margin: 0.5rem auto 1.5rem; line-height: 1.6;">
+            Your account (${auth.currentUser.email}) is not authorized to access this panel. Contact administrative configuration if you believe this is a mistake.
+          </p>
+          <button class="btn btn-primary" onclick="auth.signOut(); location.reload();">Log in with a different account</button>
+        </div>
+      `;
+    }
+
+    // Load orders
+    function loadAllOrders() {
+      db.collection("all_orders").orderBy("created_at", "desc").onSnapshot(snapshot => {
+        ordersList = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        renderDashboard();
+      }, err => {
+        console.error("Firestore loading error:", err);
+        document.getElementById('orders-table-body').innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 3rem; color: var(--accent-admin-red);">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+              Error loading orders: Permission denied or collection missing.
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderDashboard() {
+      // Calculate metric values
+      const completedOrders = ordersList.filter(o => o.status === "paid" || o.status === "shipped");
+      const totalRevenue = completedOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+      const pendingShipments = ordersList.filter(o => o.status === "paid").length;
+
+      document.getElementById('metric-revenue').textContent = `₹${totalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('metric-orders').textContent = completedOrders.length;
+      document.getElementById('metric-pending').textContent = pendingShipments;
+
+      // Filter and render list
+      applyFilters();
+    }
+
+    // Search and Status Filters
+    const searchInput = document.getElementById('admin-search-input');
+    const statusFilter = document.getElementById('admin-status-filter');
+
+    searchInput.addEventListener('input', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+
+    function applyFilters() {
+      const searchVal = searchInput.value.toLowerCase();
+      const statusVal = statusFilter.value;
+
+      const filtered = ordersList.filter(o => {
+        const matchesSearch = o.order_id.toLowerCase().includes(searchVal) ||
+                             (o.buyer_name && o.buyer_name.toLowerCase().includes(searchVal)) ||
+                             (o.buyer_email && o.buyer_email.toLowerCase().includes(searchVal));
+        
+        let matchesStatus = true;
+        if (statusVal !== "all") {
+          matchesStatus = o.status === statusVal;
+        }
+
+        return matchesSearch && matchesStatus;
+      });
+
+      const tbody = document.getElementById('orders-table-body');
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 4rem; color: #64748b;">
+              <i class="fa-solid fa-box-open" style="font-size: 1.8rem; margin-bottom: 0.5rem; display: block;"></i>
+              No orders matched your search criteria.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => {
+        const orderDate = o.created_at ? o.created_at.toDate().toLocaleString() : 'N/A';
+        
+        const itemsHTML = o.items ? o.items.map(it => `
+          <li><strong>${it.title}</strong> x${it.qty} (₹${it.price})</li>
+        `).join("") : 'N/A';
+
+        const statusClass = o.status === "shipped" ? "status-shipped" : (o.status === "paid" ? "status-paid" : "status-pending");
+
+        // Action button to mark as shipped
+        const actionBtn = o.status === "paid" 
+          ? `<button class="action-btn" onclick="markAsShipped('${o.id}')"><i class="fa-solid fa-truck-ramp-box"></i> Mark Shipped</button>`
+          : `<span style="font-size: 0.8rem; color: #64748b; font-style: italic;">No actions pending</span>`;
+
+        return `
+          <tr>
+            <td class="order-id-label">${o.order_id}</td>
+            <td style="white-space: nowrap; color: #cbd5e1; font-size: 0.8rem;">${orderDate}</td>
+            <td class="customer-info">
+              <h5>${o.buyer_name || 'N/A'}</h5>
+              <p>${o.buyer_email || 'N/A'}</p>
+            </td>
+            <td>
+              <ul class="items-list">
+                ${itemsHTML}
+              </ul>
+            </td>
+            <td class="address-cell">${o.shipping_address || '<span style="font-style: italic; color: #64748b;">Digital Delivery</span>'}</td>
+            <td style="font-weight: 600; color: #fff;">₹${(o.total || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+            <td><span class="badge-status ${statusClass}">${o.status}</span></td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // Function to update order status to Shipped
+    window.markAsShipped = async function(orderId) {
+      if (confirm(`Mark order ${orderId} as Shipped?`)) {
+        try {
+          await db.collection("all_orders").doc(orderId).update({
+            status: "shipped",
+            shipped_at: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } catch (err) {
+          alert("Error updating order: " + err.message);
+        }
+      }
+    };
+  </script>
+
+</body>
+</html>

@@ -858,6 +858,38 @@ function initCheckout() {
               paySubmitBtn.disabled = false;
               paySubmitBtn.textContent = originalText;
 
+              // Save full order document to root-level all_orders
+              const hasPhysical = cart.some(c => c.type === "original" || c.type === "bulk-stock" || (typeof c.id === "string" && (c.id.startsWith("wl") || c.id.startsWith("wf") || c.id.startsWith("sl"))) || typeof c.id === "number");
+              const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+              const shipping = (hasPhysical && subtotal < 500) ? 50 : 0;
+              const total = subtotal + shipping;
+
+              const orderRecord = {
+                order_id: response.razorpay_order_id,
+                payment_id: response.razorpay_payment_id,
+                uid: auth.currentUser.uid,
+                buyer_name: document.getElementById("chk-name") ? document.getElementById("chk-name").value : (auth.currentUser.displayName || ""),
+                buyer_email: auth.currentUser.email,
+                shipping_address: document.getElementById("chk-address") ? document.getElementById("chk-address").value : "",
+                items: cart.map(item => ({
+                  id: item.id,
+                  title: item.title,
+                  price: item.price,
+                  qty: item.qty,
+                  type: item.type
+                })),
+                subtotal: subtotal,
+                shipping: shipping,
+                total: total,
+                status: "paid",
+                created_at: firebase.firestore.FieldValue.serverTimestamp()
+              };
+
+              if (typeof db !== "undefined" && db) {
+                await db.collection("all_orders").doc(response.razorpay_order_id).set(orderRecord)
+                  .catch(err => console.warn("Failed to save order to all_orders collection:", err));
+              }
+
               // Mark originals sold locally and in Firestore
               const soldPromises = [];
               cart.forEach(item => {

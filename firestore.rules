@@ -23,5 +23,14 @@ service cloud.firestore {
       allow create: if request.auth != null;
       allow update, delete: if false;
     }
+
+    // Allow authenticated users to create their own order copy under root-level all_orders
+    // Allow sankalrajsts2122@gmail.com full read/write access to manage shipments
+    match /all_orders/{orderId} {
+      allow read: if request.auth != null && (request.auth.token.email == 'sankalrajsts2122@gmail.com' || resource.data.uid == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null && (request.auth.token.email == 'sankalrajsts2122@gmail.com' || resource.data.uid == request.auth.uid);
+      allow delete: if request.auth != null && request.auth.token.email == 'sankalrajsts2122@gmail.com';
+    }
   }
 }
